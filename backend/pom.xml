@@ -15,6 +15,9 @@
     <description>backend</description>
     <properties>
         <java.version>17</java.version>
+        <sonar.organization>ulrikewerner</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.projectName>ulrikewerner_capstone-quartett-backend</sonar.projectName>
     </properties>
 
     <dependencies>
