@@ -15,16 +15,4 @@ public class Deck {
     public Deck(List<Card> cards) {
         this.cards = cards;
     }
-
-    public Card getNextCard() {
-        return cards.get(0);
-    }
-
-    public void addCardToEndOfDeck(Card card) {
-        cards.add(card);
-    }
-
-    public void removeFirstCard() {
-        cards.remove(0);
-    }
 }
