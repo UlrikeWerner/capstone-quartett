@@ -5,7 +5,7 @@ import com.github.ulrikewerner.backend.repositories.CardRepo;
 import com.github.ulrikewerner.backend.services.CardService;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -20,28 +20,26 @@ class CardServiceTest {
     @Test
     void getAllCard_expectEmptyList() {
 
-        List<Card> cardList = List.of();
+        ArrayList<Card> cardList = new ArrayList<>();
 
         when(cardRepo.findAll()).thenReturn(cardList);
-        List<Card> actual = cardService.getAllCards();
-
-        List<Card> expected = List.of();
+        ArrayList<Card> actual = cardService.getAllCards();
 
         verify(cardRepo).findAll();
-        assertEquals(expected, actual);
+        assertTrue(actual.isEmpty());
     }
 
     @Test
     void getAllCard_expectOneCard() {
 
-        List<Card> cardList = List.of(testCard);
+        ArrayList<Card> cardList = new ArrayList<>();
+        cardList.add(testCard);
 
         when(cardRepo.findAll()).thenReturn(cardList);
-        List<Card> actual = cardService.getAllCards();
+        ArrayList<Card> actual = cardService.getAllCards();
 
-        List<Card> expected = List.of(new Card(
-                "1", "Flensburger Seemöwen", 26.42f
-        ));
+        ArrayList<Card> expected = new ArrayList<>();
+        expected.add(new Card("1", "Flensburger Seemöwen", 26.42f));
 
         verify(cardRepo).findAll();
         assertEquals(expected, actual);
