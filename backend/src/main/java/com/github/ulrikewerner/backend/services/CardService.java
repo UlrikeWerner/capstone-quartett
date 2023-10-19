@@ -14,6 +14,6 @@ public class CardService {
     private final CardRepo cardRepo;
 
     public ArrayList<Card> getAllCards() {
-        return (ArrayList<Card>) cardRepo.findAll();
+        return new ArrayList<>(cardRepo.findAll());
     }
 }
