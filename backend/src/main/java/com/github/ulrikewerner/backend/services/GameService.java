@@ -16,7 +16,7 @@ public class GameService {
 
     private final CardService cardService;
     private final GameRepo gameRepo;
-    public String startNewGame() {
+    public Game startNewGame() {
         Deck cardDeck = new Deck(cardService.getAllCards());
         cardDeck.shuffleDeck();
 
@@ -30,7 +30,6 @@ public class GameService {
             optionalCard2.ifPresent(opponentCards::add);
         }
 
-        Game newGame = gameRepo.save(new Game(new Deck(playerCards), new Deck(opponentCards)));
-        return newGame.getId();
+        return gameRepo.save(new Game(new Deck(playerCards), new Deck(opponentCards)));
     }
 }

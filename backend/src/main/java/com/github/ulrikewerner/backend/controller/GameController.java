@@ -16,6 +16,6 @@ public class GameController {
 
     @PostMapping()
     public ResponseEntity<String> startNewGame() {
-        return ResponseEntity.ok(gameService.startNewGame());
+        return ResponseEntity.ok(gameService.startNewGame().getId());
     }
 }
