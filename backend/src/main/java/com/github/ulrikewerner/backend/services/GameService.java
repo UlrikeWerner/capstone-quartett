@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,11 +20,14 @@ public class GameService {
         Deck cardDeck = new Deck(cardService.getAllCards());
         cardDeck.shuffleDeck();
 
-        List<Card> playerCards = new ArrayList<>();
-        List<Card> opponentCards = new ArrayList<>();
+        ArrayList<Card> playerCards = new ArrayList<>();
+        ArrayList<Card> opponentCards = new ArrayList<>();
         while (cardDeck.size() > 1){
-            playerCards.add(cardDeck.drawFirstCard());
-            opponentCards.add(cardDeck.drawFirstCard());
+            Optional<Card> optionalCard1 = cardDeck.drawFirstCard();
+            Optional<Card> optionalCard2 = cardDeck.drawFirstCard();
+
+            optionalCard1.ifPresent(playerCards::add);
+            optionalCard2.ifPresent(opponentCards::add);
         }
 
         Game newGame = gameRepo.save(new Game(new Deck(playerCards), new Deck(opponentCards)));

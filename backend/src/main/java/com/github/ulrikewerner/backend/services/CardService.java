@@ -5,7 +5,7 @@ import com.github.ulrikewerner.backend.repositories.CardRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -13,7 +13,7 @@ public class CardService {
 
     private final CardRepo cardRepo;
 
-    public List<Card> getAllCards() {
-        return cardRepo.findAll();
+    public ArrayList<Card> getAllCards() {
+        return (ArrayList<Card>) cardRepo.findAll();
     }
 }

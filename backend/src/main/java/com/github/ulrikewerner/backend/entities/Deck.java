@@ -2,13 +2,14 @@ package com.github.ulrikewerner.backend.entities;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 
 @Data
 @AllArgsConstructor
 public class Deck {
-    private List<Card> cards;
+    private ArrayList<Card> cards;
 
     public int size() {
         return cards.size();
@@ -18,9 +19,19 @@ public class Deck {
         Collections.shuffle(cards);
     }
 
-    public Card drawFirstCard() {
+    public Optional<Card> lookAtFirstCard() {
+        if(cards.isEmpty()){
+            return Optional.empty();
+        }
+        return Optional.of(cards.get(0));
+    }
+
+    public Optional<Card> drawFirstCard() throws IndexOutOfBoundsException{
+        if(cards.isEmpty()){
+            return Optional.empty();
+        }
         Card card = cards.get(0);
         cards.remove(0);
-        return card;
+        return Optional.of(card);
     }
 }
