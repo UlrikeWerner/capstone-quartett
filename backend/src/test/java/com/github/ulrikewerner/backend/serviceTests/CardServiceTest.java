@@ -35,7 +35,7 @@ class CardServiceTest {
         when(cardRepo.findAll()).thenReturn(cardList);
         List<Card> actual = cardService.getAllCards();
 
-       List<Card> expected = List.of(new Card("1", "Flensburger Seemöwen", 26.42f));
+        List<Card> expected = List.of(new Card("1", "Flensburger Seemöwen", 26.42f));
 
         verify(cardRepo).findAll();
         assertEquals(expected, actual);

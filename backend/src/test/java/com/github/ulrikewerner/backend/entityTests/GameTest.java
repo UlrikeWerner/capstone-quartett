@@ -7,16 +7,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 class GameTest {
 
     @Test
     void Game_constructorCreateCorrectObject() {
-        ArrayList<Card> cardList = new ArrayList<>();
-        cardList.add(new Card("1", "Flensburg Seemöwen", 25.42f));
-        ArrayList<Card> cardList2 = new ArrayList<>();
-        cardList2.add(new Card("2", "Kieler Seemuscheln", 23.25f));
+        List<Card> cardList = List.of(new Card("1", "Flensburg Seemöwen", 25.42f));
+        List<Card> cardList2 = List.of(new Card("2", "Kieler Seemuscheln", 23.25f));
         Deck player = new Deck(cardList);
         Deck opponent = new Deck(cardList2);
 
