@@ -15,7 +15,7 @@ export default function App() {
                        element={<Lobby/>}
                 />
                 <Route path={"/game"}
-                       element={<Navigate to={"/game/:id"}/>}
+                       element={<Navigate to={"/lobby"}/>}
                 />
                 <Route path={"/game/:id"}
                        element={<Game/>}
