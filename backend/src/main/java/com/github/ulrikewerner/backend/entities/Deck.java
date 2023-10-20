@@ -4,12 +4,16 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Data
-@AllArgsConstructor
 public class Deck {
     private ArrayList<Card> cards;
+
+    public Deck(List<Card> cardList){
+        cards = new ArrayList<>(cardList);
+    }
 
     public int size() {
         return cards.size();
