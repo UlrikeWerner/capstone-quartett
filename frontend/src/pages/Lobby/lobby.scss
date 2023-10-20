@@ -1,0 +1,81 @@
+.lobby {
+  min-height: 100vh;
+  h1 {
+    padding-top: 1.5rem;
+    text-align: center;
+    font-size: 3rem;
+  }
+
+  .football-menu{
+    position: absolute;
+    overflow: hidden;
+    height: 31.25rem;
+    width: 18.75rem;
+    background-color: #c66029;
+    border-radius: 50%;
+    border: 5px solid black;
+    top: 15%;
+    left: 50%;
+    translate: -50%;
+
+    .football-basic-line-class {
+      position: absolute;
+      background-color: white;
+    }
+
+    .football-line {
+      height: 2.125rem;
+      width: 100%;
+    }
+
+    .top-line {
+      top: 10%;
+    }
+
+    .bottom-line {
+      bottom: 10%
+    }
+
+    .football-stitching {
+      height: 12.5rem;
+      width: 1.875rem;
+      top: 30%;
+      left: 43%;
+
+      .stitch-button-line {
+        height: 2rem;
+        width: 7rem;
+        left: -130%
+      }
+
+      .stitch-button-2 {
+        top: 45%;
+      }
+
+      .stitch-button-3 {
+        top: 90%;
+      }
+    }
+  }
+
+  .football-button {
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    background: transparent;
+    color: darkgreen;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.2s ease-in-out;
+
+
+    &:is(:hover, :focus) {
+      background-color: darkgreen;
+      color: #fff;
+    }
+  }
+}
