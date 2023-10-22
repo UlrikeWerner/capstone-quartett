@@ -50,12 +50,13 @@
         left: -130%
       }
 
-      .stitch-button-2 {
-        top: 45%;
+    .stitch-button-2 {
+        top: 50%;
+        transform: translateY(-50%);
       }
 
       .stitch-button-3 {
-        top: 90%;
+        bottom: 0;
       }
     }
   }
