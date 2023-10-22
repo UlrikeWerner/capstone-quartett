@@ -22,7 +22,7 @@ export default function Lobby() {
                 <div className="football-basic-line-class football-line top-line"></div>
                 <div className="football-basic-line-class football-line bottom-line"></div>
                 <div className="football-basic-line-class football-stitching">
-                    <div className="football-basic-line-class stitch-button-line stitch-button-line">
+                    <div className="football-basic-line-class stitch-button-line">
                         <button className="football-button" onClick={createNewGame}>
                             Neues Spiel
                         </button>

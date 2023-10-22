@@ -37,11 +37,12 @@
     }
 
     .football-stitching {
-position: relative;
+      position: relative;
       height: 12.5rem;
       width: 1.875rem;
-      top: 30%;
-      left: 43%;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
 
       .stitch-button-line {
         height: 2rem;
