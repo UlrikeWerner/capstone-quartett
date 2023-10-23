@@ -13,8 +13,8 @@ class GameTest {
 
     @Test
     void Game_constructorCreateCorrectObject() {
-        List<Card> cardList = List.of(new Card("1", "Flensburg Seemöwen", 25.42));
-        List<Card> cardList2 = List.of(new Card("2", "Kieler Seemuscheln", 23.25));
+        List<Card> cardList = List.of(new Card("1", "Flensburg Seemöwen", 2542));
+        List<Card> cardList2 = List.of(new Card("2", "Kieler Seemuscheln", 2325));
         Deck player = new Deck(cardList);
         Deck opponent = new Deck(cardList2);
 

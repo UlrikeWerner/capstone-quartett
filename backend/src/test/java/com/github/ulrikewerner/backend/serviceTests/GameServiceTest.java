@@ -19,10 +19,10 @@ class GameServiceTest {
     CardService cardservice = mock(CardService.class);
     GameService gameService = new GameService(cardservice, gameRepo);
 
-    public Card dummyCard1 = new Card("1", "Team1", 12.23);
-    public Card dummyCard2 = new Card("2", "Team2", 12.23);
-    public Card dummyCard3 = new Card("3", "Team3", 12.23);
-    public Card dummyCard4 = new Card("4", "Team3", 12.23);
+    public Card dummyCard1 = new Card("1", "Team1", 1223);
+    public Card dummyCard2 = new Card("2", "Team2", 1223);
+    public Card dummyCard3 = new Card("3", "Team3", 1223);
+    public Card dummyCard4 = new Card("4", "Team3", 1223);
 
     @Test
     void startNewGame_expectOneGame() {

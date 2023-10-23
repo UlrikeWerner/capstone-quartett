@@ -11,9 +11,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 class GameStateDTOTest {
-    private final Card flensburgCard = new Card("1", "Flensburg Seemöwen", 25.42);
-    private final Card kielCard = new Card("2", "Kieler Seemuscheln", 23.25);
-    private final Card holnisCard = new Card("3", "Holniser Seesterne", 24.54);
+    private final Card flensburgCard = new Card("1", "Flensburg Seemöwen", 2542);
+    private final Card kielCard = new Card("2", "Kieler Seemuscheln", 2325);
+    private final Card holnisCard = new Card("3", "Holniser Seesterne", 2454);
 
     @Test
     void GameStateDTO_constructor_createCorrectObject(){
@@ -26,11 +26,11 @@ class GameStateDTOTest {
         assertEquals(1, testGameStateDTO.getScore().get("player"));
         assertEquals(2, testGameStateDTO.getScore().get("opponent"));
         assertEquals(NextTurnBy.PLAYER, testGameStateDTO.getNextTurnBy());
-        assertEquals(flensburgCard, testGameStateDTO.getNextPlayerCard());
+        assertEquals(flensburgCard.team(), testGameStateDTO.getNextPlayerCard().getTeam());
+        assertEquals(25.42, testGameStateDTO.getNextPlayerCard().getPointsPerGame());
 
         testGame.setPlayerTurn(false);
         GameStateDTO testGameStateDTO2 = new GameStateDTO(testGame);
         assertEquals(NextTurnBy.OPPONENT, testGameStateDTO2.getNextTurnBy());
-
     }
 }
