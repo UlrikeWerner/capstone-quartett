@@ -6,9 +6,11 @@ import com.github.ulrikewerner.backend.entities.Game;
 import com.github.ulrikewerner.backend.repositories.GameRepo;
 import com.github.ulrikewerner.backend.services.CardService;
 import com.github.ulrikewerner.backend.services.GameService;
+import net.bytebuddy.dynamic.DynamicType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -55,5 +57,31 @@ class GameServiceTest {
         assertEquals(newGame.getOpponentCards().size(), actualGame.getOpponentCards().size());
         assertTrue(actualGame.isPlayerTurn());
         assertFalse(actualGame.isFinished());
+    }
+
+    @Test
+    void getGameById_shouldReturnAnOptionalOfTheRightGame(){
+        Deck deck1 = new Deck(List.of(dummyCard1, dummyCard2));
+        Deck deck2 = new Deck(List.of(dummyCard3, dummyCard4));
+
+        Game testGame = new Game(deck1, deck2);
+        String id = testGame.getId();
+
+        when(gameRepo.findById(id)).thenReturn(Optional.of(testGame));
+
+        Optional<Game> optionalGame = gameService.getGameById(id);
+
+        verify(gameRepo).findById(id);
+        assertEquals(Optional.of(testGame), optionalGame);
+    }
+
+    @Test
+    void getGameById_shouldReturnEmptyOptional_WhenTheIdIsNotFound(){
+        when(gameRepo.findById("quatschId")).thenReturn(Optional.empty());
+
+        Optional<Game> optionalGame = gameService.getGameById("quatschId");
+
+        verify(gameRepo).findById("quatschId");
+        assertEquals(Optional.empty(), optionalGame);
     }
 }
