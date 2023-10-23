@@ -10,10 +10,16 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DeckTest {
-    Card dummyCard1 = new Card("1", "Flensburg Seemöwen", 25.42f);
-    Card dummyCard2 = new Card("2", "Kieler Seemuscheln", 23.25f);
-    Card dummyCard3 = new Card("3", "Hamburg SeeTeufel", 26.23f);
-    Card dummyCard4 = new Card("4", "Lübecker MarzipanSchweine", 24.12f);
+    Card dummyCard1 = new Card("1", "Flensburg Seemöwen", 25.42);
+    Card dummyCard2 = new Card("2", "Kieler Seemuscheln", 23.25);
+    Card dummyCard3 = new Card("3", "Hamburg SeeTeufel", 26.23);
+    Card dummyCard4 = new Card("4", "Lübecker MarzipanSeesterne", 24.12);
+    Card dummyCard5 = new Card("5", "Hölnis SeeZunge", 24.13);
+    Card dummyCard6 = new Card("6", "Flensburger Meerjungfrauen", 25.12);
+    Card dummyCard7 = new Card("7", "Kieler FischKöpfe", 24.12);
+    Card dummyCard8 = new Card("8", "Lübecker Piraten", 27.12);
+    Card dummyCard9 = new Card("9", "Hamburger GewürzHändler", 22.22);
+    Card dummyCard10 = new Card("10", "Hölnis Strandläufer", 14.15);
 
     @Test
     void Deck_size_when2CardsAreInTheDeck_theSizeShouldBe2() {
@@ -28,8 +34,12 @@ class DeckTest {
 
     @Test
     void Deck_shuffleDeck_expectedUnsortedDeck() {
-        List<Card> cardList = List.of(dummyCard1, dummyCard2, dummyCard3, dummyCard4);
-        List<Card> sortedList = List.of(dummyCard1, dummyCard2, dummyCard3, dummyCard4);
+        List<Card> cardList = List.of(
+                dummyCard1, dummyCard2, dummyCard3, dummyCard4, dummyCard5, dummyCard6, dummyCard7, dummyCard8, dummyCard9, dummyCard10
+        );
+        List<Card> sortedList = List.of(
+                dummyCard1, dummyCard2, dummyCard3, dummyCard4, dummyCard5, dummyCard6, dummyCard7, dummyCard8, dummyCard9, dummyCard10
+        );
 
         Deck cardDeck = new Deck(cardList);
         Deck sortedDeck = new Deck(sortedList);

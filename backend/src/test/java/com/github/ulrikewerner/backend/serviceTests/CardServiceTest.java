@@ -15,7 +15,7 @@ class CardServiceTest {
     CardRepo cardRepo = mock(CardRepo.class);
     CardService cardService = new CardService(cardRepo);
 
-    Card testCard = new Card("1", "Flensburger Seemöwen", 26.42f);
+    Card testCard = new Card("1", "Flensburger Seemöwen", 26.42);
 
     @Test
     void getAllCard_expectEmptyList() {
@@ -35,7 +35,7 @@ class CardServiceTest {
         when(cardRepo.findAll()).thenReturn(cardList);
         List<Card> actual = cardService.getAllCards();
 
-        List<Card> expected = List.of(new Card("1", "Flensburger Seemöwen", 26.42f));
+        List<Card> expected = List.of(new Card("1", "Flensburger Seemöwen", 26.42));
 
         verify(cardRepo).findAll();
         assertEquals(expected, actual);
