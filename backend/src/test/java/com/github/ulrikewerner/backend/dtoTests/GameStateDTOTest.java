@@ -27,5 +27,10 @@ class GameStateDTOTest {
         assertEquals(2, testGameStateDTO.getScore().get("opponent"));
         assertEquals(NextTurnBy.PLAYER, testGameStateDTO.getNextTurnBy());
         assertEquals(flensburgCard, testGameStateDTO.getNextPlayerCard());
+
+        testGame.setPlayerTurn(false);
+        GameStateDTO testGameStateDTO2 = new GameStateDTO(testGame);
+        assertEquals(NextTurnBy.OPPONENT, testGameStateDTO2.getNextTurnBy());
+
     }
 }
