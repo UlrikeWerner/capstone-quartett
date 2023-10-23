@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Data
+@NoArgsConstructor
 public class Deck {
     private ArrayList<Card> cards;
 
-    public Deck(List<Card> cardList){
-        cards = new ArrayList<>(cardList);
+    public Deck(List<Card> cards){
+        this.cards = new ArrayList<>(cards);
     }
 
     public int size() {

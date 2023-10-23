@@ -32,4 +32,8 @@ public class GameService {
 
         return gameRepo.save(new Game(new Deck(playerCards), new Deck(opponentCards)));
     }
+
+    public Optional<Game> getGameById(String id) {
+        return gameRepo.findById(id);
+    }
 }
