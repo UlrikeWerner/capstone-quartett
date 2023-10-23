@@ -6,7 +6,6 @@ import com.github.ulrikewerner.backend.entities.Game;
 import com.github.ulrikewerner.backend.repositories.GameRepo;
 import com.github.ulrikewerner.backend.services.CardService;
 import com.github.ulrikewerner.backend.services.GameService;
-import net.bytebuddy.dynamic.DynamicType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
