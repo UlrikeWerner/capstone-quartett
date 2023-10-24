@@ -16,8 +16,6 @@ class CardServiceTest {
 
     CardRepo cardRepo = mock(CardRepo.class);
     CardService cardService = new CardService(cardRepo);
-
-    //2642
     CardAttribute testAttribute = new CardAttribute("test", 2642, true);
     ArrayList<CardAttribute> testAttributes = new ArrayList<>(List.of(testAttribute));
     Card testCard = new Card("1", "Flensburger Seemöwen", testAttributes);

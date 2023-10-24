@@ -50,7 +50,6 @@ class GameControllerIntegrationTest {
                 .getContentAsString();
 
         assertThat(actual).isNotNull().isNotEqualTo("");
-        System.out.println(actual);
     }
 
     @Test
