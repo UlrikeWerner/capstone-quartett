@@ -1,0 +1,8 @@
+.gameBoard {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1.5fr 1fr;
+  grid-template-areas:
+    ".          score      score        ."
+    ".          info       info         ."
+    "playerDeck playerCard opponentCard opponentDeck";
+}

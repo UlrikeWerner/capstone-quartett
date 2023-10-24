@@ -1,3 +1,5 @@
+@use 'src/styles/color';
+
 .lobby {
   min-height: 100vh;
   h1 {
@@ -11,16 +13,16 @@
     overflow: hidden;
     height: 31.25rem;
     width: 18.75rem;
-    background-color: #c66029;
+    background-color: color.$football-base-color;
     border-radius: 50%;
-    border: 5px solid black;
-    top: 15%;
+    border: color.$football-border;
+    top: 50%;
     left: 50%;
-    translate: -50%;
+    translate: -50% -40%;
 
     .football-basic-line-class {
       position: absolute;
-      background-color: white;
+      background-color: color.$football-baseline-color;
     }
 
     .football-line {
@@ -70,15 +72,15 @@
     border: none;
     text-align: center;
     background: transparent;
-    color: darkgreen;
+    color: color.$football-button-font-color;
     font-weight: 600;
     font-size: 1.1rem;
     transition: all 0.2s ease-in-out;
 
 
     &:is(:hover, :focus) {
-      background-color: darkgreen;
-      color: #fff;
+      background-color: color.$football-button-action-background;
+      color: color.$football-button-action-font-color;
     }
   }
 }
