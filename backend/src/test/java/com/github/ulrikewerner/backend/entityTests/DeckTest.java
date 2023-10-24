@@ -1,25 +1,29 @@
 package com.github.ulrikewerner.backend.entityTests;
 
 import com.github.ulrikewerner.backend.entities.Card;
+import com.github.ulrikewerner.backend.entities.CardAttribute;
 import com.github.ulrikewerner.backend.entities.Deck;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class DeckTest {
-    Card dummyCard1 = new Card("1", "Flensburg Seemöwen", 2542);
-    Card dummyCard2 = new Card("2", "Kieler Seemuscheln", 2325);
-    Card dummyCard3 = new Card("3", "Hamburg SeeTeufel", 2623);
-    Card dummyCard4 = new Card("4", "Lübecker MarzipanSeesterne", 2412);
-    Card dummyCard5 = new Card("5", "Hölnis SeeZunge", 2413);
-    Card dummyCard6 = new Card("6", "Flensburger Meerjungfrauen", 2512);
-    Card dummyCard7 = new Card("7", "Kieler FischKöpfe", 2412);
-    Card dummyCard8 = new Card("8", "Lübecker Piraten", 2712);
-    Card dummyCard9 = new Card("9", "Hamburger GewürzHändler", 2222);
-    Card dummyCard10 = new Card("10", "Hölnis Strandläufer", 1415);
+    CardAttribute dummyCardAttribute1 = new CardAttribute("test", 2542, true);
+    CardAttribute dummyCardAttribute2 = new CardAttribute("test", 42, false);
+    Card dummyCard1 = new Card("1", "Flensburg Seemöwen", new ArrayList<>(List.of(dummyCardAttribute1)));
+    Card dummyCard2 = new Card("2", "Kieler Seemuscheln", new ArrayList<>(List.of(dummyCardAttribute1)));
+    Card dummyCard3 = new Card("3", "Hamburg SeeTeufel", new ArrayList<>(List.of(dummyCardAttribute1)));
+    Card dummyCard4 = new Card("4", "Lübecker MarzipanSeesterne", new ArrayList<>(List.of(dummyCardAttribute1)));
+    Card dummyCard5 = new Card("5", "Holnis SeeZunge", new ArrayList<>(List.of(dummyCardAttribute1)));
+    Card dummyCard6 = new Card("6", "Flensburger Meerjungfrauen", new ArrayList<>(List.of(dummyCardAttribute2)));
+    Card dummyCard7 = new Card("7", "Kieler FischKöpfe", new ArrayList<>(List.of(dummyCardAttribute2)));
+    Card dummyCard8 = new Card("8", "Lübecker Piraten", new ArrayList<>(List.of(dummyCardAttribute2)));
+    Card dummyCard9 = new Card("9", "Hamburger GewürzHändler", new ArrayList<>(List.of(dummyCardAttribute2)));
+    Card dummyCard10 = new Card("10", "Holnis Strandläufer", new ArrayList<>(List.of(dummyCardAttribute2)));
 
     @Test
     void Deck_size_when2CardsAreInTheDeck_theSizeShouldBe2() {

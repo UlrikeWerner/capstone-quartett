@@ -1,6 +1,7 @@
 package com.github.ulrikewerner.backend.serviceTests;
 
 import com.github.ulrikewerner.backend.entities.Card;
+import com.github.ulrikewerner.backend.entities.CardAttribute;
 import com.github.ulrikewerner.backend.entities.Deck;
 import com.github.ulrikewerner.backend.entities.Game;
 import com.github.ulrikewerner.backend.repositories.GameRepo;
@@ -8,6 +9,7 @@ import com.github.ulrikewerner.backend.services.CardService;
 import com.github.ulrikewerner.backend.services.GameService;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +22,11 @@ class GameServiceTest {
     CardService cardservice = mock(CardService.class);
     GameService gameService = new GameService(cardservice, gameRepo);
 
-    public Card dummyCard1 = new Card("1", "Team1", 1223);
-    public Card dummyCard2 = new Card("2", "Team2", 1223);
-    public Card dummyCard3 = new Card("3", "Team3", 1223);
-    public Card dummyCard4 = new Card("4", "Team3", 1223);
+    private final CardAttribute dummyCardAttribute = new CardAttribute("test", 1223, true);
+    private final Card dummyCard1 = new Card("1", "Team1", new ArrayList<>(List.of(dummyCardAttribute)));
+    private final Card dummyCard2 = new Card("2", "Team2", new ArrayList<>(List.of(dummyCardAttribute)));
+    private final Card dummyCard3 = new Card("3", "Team3", new ArrayList<>(List.of(dummyCardAttribute)));
+    private final Card dummyCard4 = new Card("4", "Team3", new ArrayList<>(List.of(dummyCardAttribute)));
 
     @Test
     void startNewGame_expectOneGame() {
