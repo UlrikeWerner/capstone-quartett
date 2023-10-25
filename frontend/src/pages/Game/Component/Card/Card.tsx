@@ -2,12 +2,12 @@ import "./Card.scss";
 import {CardDTO} from "../../../../types/CardDTO.ts";
 
 type CardDeckProps = {
-    type: "deck" | "movingCard" |"playCard";
-    owner: "player" | "opponent";
-    score?: number;
-    cardContent?: CardDTO;
-    isClickable?: boolean;
-    isVisible?: boolean;
+    readonly type: "deck" | "movingCard" |"playCard";
+    readonly owner: "player" | "opponent";
+    readonly score?: number;
+    readonly cardContent?: CardDTO;
+    readonly isClickable?: boolean;
+    readonly isVisible?: boolean;
     drawCard?: () => void;
 }
 

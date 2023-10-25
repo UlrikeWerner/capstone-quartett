@@ -1,8 +1,8 @@
 import "./Info.scss";
 
 type InfoProps = {
-    infoText: string;
-    instructionText: string;
+    readonly infoText: string;
+    readonly instructionText: string;
 }
 export default function Info(props: InfoProps) {
 

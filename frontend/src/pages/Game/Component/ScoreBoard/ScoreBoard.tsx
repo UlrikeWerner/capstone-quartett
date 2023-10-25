@@ -1,8 +1,8 @@
 import "./ScoreBoard.scss"
 
 type ScoreBoardProps = {
-    playerScore: number;
-    opponentScore: number;
+    readonly playerScore: number;
+    readonly opponentScore: number;
 }
 
 export default function ScoreBoard(props: ScoreBoardProps) {
