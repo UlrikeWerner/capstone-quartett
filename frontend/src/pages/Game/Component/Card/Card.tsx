@@ -42,10 +42,8 @@ export default function Card(props: CardDeckProps) {
     }
 
     function cardClick() {
-        if(props.isClickable){
-            if(props.drawCard){
-                props.drawCard();
-            }
+        if(props.isClickable && props.drawCard){
+            props.drawCard();
         }
     }
 
