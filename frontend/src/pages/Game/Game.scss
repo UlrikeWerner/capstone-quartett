@@ -28,7 +28,23 @@
   border-right: 2px solid color.$border-color;
 }
 
+.player-card {
+  grid-area: playerCard;
+}
+
 .opponent-deck {
   grid-area: opponentDeck;
   border-left: 2px solid color.$border-color;
+}
+
+.opponent-card {
+  grid-area: opponentCard;
+}
+
+.vs {
+  position: absolute;
+  left: 0;
+  translate: -50%;
+  font-weight: bold;
+  font-size: 3rem;
 }

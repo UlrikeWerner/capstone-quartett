@@ -3,7 +3,6 @@ import "./Info.scss";
 type InfoProps = {
     infoText: string;
     instructionText: string;
-    nextTurn: "PLAYER" | "OPPONENT" | undefined;
 }
 export default function Info(props: InfoProps) {
 
