@@ -1,3 +1,5 @@
+@use "src/styles/color";
+
 .gameBoard {
   display: grid;
   grid-template-columns: 1fr 1.5fr 1.5fr 1fr;
@@ -9,4 +11,24 @@
 
 .infoField {
   grid-area: info;
+}
+
+.deck {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 60vh;
+  background-color: transparent;
+}
+
+.player-deck {
+  grid-area: playerDeck;
+  border-right: 2px solid color.$border-color;
+}
+
+.opponent-deck {
+  grid-area: opponentDeck;
+  border-left: 2px solid color.$border-color;
 }

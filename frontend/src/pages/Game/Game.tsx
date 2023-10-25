@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {GameStateDTO} from "../../types/GameStateDTO.ts";
 import "./Game.scss";
 import ScoreBoard from "./Component/ScoreBoard/ScoreBoard.tsx";
-import CardDeck from "./Component/CardDeck/CardDeck.tsx";
+import Card from "./Component/Card/Card.tsx";
 import Info from "./Component/Info/Info.tsx";
 import {GAME_INFO_TEXTS, getStartText} from "../../types/Game_Info_Texts.ts";
 
@@ -12,8 +12,6 @@ export default function Game() {
     const {id} = useParams();
     const [errorMessage, setErrorMessage] = useState<string>();
     const [gameState, setGameState]= useState<GameStateDTO>();
-    const [isPlayerDeckVisible, setIsPlayerDeckVisible] = useState<boolean>(true);
-    const [isOpponentDeckVisible, setIsOpponentDeckVisible] = useState<boolean>(true);
     const [infoText, setInfoText] = useState<string>("");
     const [instructionText, setInstructionText] = useState<string>("");
 
@@ -47,8 +45,13 @@ export default function Game() {
                             <section className="infoField">
                                 <Info infoText={infoText} instructionText={instructionText} nextTurn={gameState.nextTurnBy}/>
                             </section>
-                            <CardDeck side="player" isVisible={isPlayerDeckVisible}/>
-                            <CardDeck side="opponent" isVisible={isOpponentDeckVisible}/>
+                            <section className="deck player-deck">
+                                <Card type="deck" owner="player" score={gameState.score.player}/>
+                                <Card type="playCard" owner="player" score={gameState.score.player} />
+                            </section>
+                            <section className="deck opponent-deck">
+                                <Card type="deck" owner="opponent" score={gameState.score.opponent}/>
+                            </section>
                         </section>
             }
         </>
