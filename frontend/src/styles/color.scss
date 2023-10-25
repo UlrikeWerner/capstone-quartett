@@ -12,5 +12,12 @@ $football-button-action-background: darkgreen;
 $football-button-action-font-color: #fff;
 
 //game
-$playerScore: blue;
-$opponentScore: red;
+$player: blue;
+$opponent: red;
+//score
+$score-border: darken(white, 20%);
+//infoField
+$info-backgroud: floralwhite;
+$info-font-color: lighten(black, 25%);
+$info-font-color-lighter: lighten(black, 45%);
+

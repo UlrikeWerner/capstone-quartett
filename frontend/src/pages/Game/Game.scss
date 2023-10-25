@@ -6,3 +6,7 @@
     ".          info       info         ."
     "playerDeck playerCard opponentCard opponentDeck";
 }
+
+.infoField {
+  grid-area: info;
+}
