@@ -6,3 +6,13 @@ export const GAME_INFO_TEXTS = {
     startOpponentTurn: "Dein Gegner ist am Zug!",
     gameOver: "Das Spiel ist vorbei!"
 }
+
+export function getStartText(nextTurn: "PLAYER" | "OPPONENT" | undefined): string {
+    if(nextTurn === "PLAYER"){
+        return GAME_INFO_TEXTS.startPlayerTurn;
+    }else if(nextTurn === "OPPONENT"){
+        return GAME_INFO_TEXTS.startOpponentTurn;
+    }else {
+        return GAME_INFO_TEXTS.gameOver;
+    }
+}
