@@ -24,6 +24,12 @@
   display: none;
 }
 
+:is(.card-player, .card-opponent) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .card-player {
   background-color: color.$player;
   transition: all 500ms ease;
@@ -38,6 +44,12 @@
 
   h3 {
     color: color.$font-color-25-black;
+    text-align: center;
+    margin-top: -0.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-logo {
     text-align: center;
   }
 

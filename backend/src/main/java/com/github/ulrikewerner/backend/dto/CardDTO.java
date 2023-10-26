@@ -11,15 +11,16 @@ import java.util.Map;
 @Getter
 public class CardDTO {
     private final String name;
-    private Map<String, String> attributes;
+    private final String logo;
+    private final Map<String, String> attributes = new LinkedHashMap<>();
 
     public CardDTO(Card card) {
         name = card.name();
+        logo = card.logo();
         setAttributes(card.attributes());
     }
 
     private void setAttributes(ArrayList<CardAttribute> attributeList) {
-        this.attributes = new LinkedHashMap<>();
         for(CardAttribute attribute : attributeList){
             if(attribute.isDecimal()){
                 attributes.put(attribute.name(), Double.toString(attribute.value() / 100.0));

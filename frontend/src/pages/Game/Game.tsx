@@ -1,6 +1,6 @@
 import {useParams} from "react-router-dom";
-import axios from "axios";
 import {useEffect, useState} from "react";
+import axios from "axios";
 import {GameStateDTO} from "../../types/GameStateDTO.ts";
 import "./Game.scss";
 import {GAME_INFO_TEXTS, getStartText} from "../../types/Game_Info_Texts.ts";
