@@ -1,7 +1,17 @@
+@use "src/styles/color";
+
 body {
-  background: darkgreen;
-  background: radial-gradient(circle, seagreen 0%, darkgreen 100%);
+  background: color.$background;
+  background: color.$green-gradient;
   font-family: "Fira Sans", sans-serif;
   font-weight: 400;
-  color: #ededed;
+  color: color.$font-color;
+}
+
+.flex-row {
+  display: flex;
+}
+
+.justify-content-space-between {
+  justify-content: space-between;
 }

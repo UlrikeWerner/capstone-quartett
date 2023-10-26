@@ -1,6 +1,7 @@
 package com.github.ulrikewerner.backend.serviceTests;
 
 import com.github.ulrikewerner.backend.entities.Card;
+import com.github.ulrikewerner.backend.entities.CardAttribute;
 import com.github.ulrikewerner.backend.entities.Deck;
 import com.github.ulrikewerner.backend.entities.Game;
 import com.github.ulrikewerner.backend.repositories.GameRepo;
@@ -8,7 +9,9 @@ import com.github.ulrikewerner.backend.services.CardService;
 import com.github.ulrikewerner.backend.services.GameService;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -19,10 +22,11 @@ class GameServiceTest {
     CardService cardservice = mock(CardService.class);
     GameService gameService = new GameService(cardservice, gameRepo);
 
-    public Card dummyCard1 = new Card("1", "Team1", 12.23f);
-    public Card dummyCard2 = new Card("2", "Team2", 12.23f);
-    public Card dummyCard3 = new Card("3", "Team3", 12.23f);
-    public Card dummyCard4 = new Card("4", "Team3", 12.23f);
+    private final CardAttribute dummyCardAttribute = new CardAttribute("test", 1223, true);
+    private final Card dummyCard1 = new Card("1", "Team1", new ArrayList<>(List.of(dummyCardAttribute)));
+    private final Card dummyCard2 = new Card("2", "Team2", new ArrayList<>(List.of(dummyCardAttribute)));
+    private final Card dummyCard3 = new Card("3", "Team3", new ArrayList<>(List.of(dummyCardAttribute)));
+    private final Card dummyCard4 = new Card("4", "Team3", new ArrayList<>(List.of(dummyCardAttribute)));
 
     @Test
     void startNewGame_expectOneGame() {
@@ -55,5 +59,31 @@ class GameServiceTest {
         assertEquals(newGame.getOpponentCards().size(), actualGame.getOpponentCards().size());
         assertTrue(actualGame.isPlayerTurn());
         assertFalse(actualGame.isFinished());
+    }
+
+    @Test
+    void getGameById_shouldReturnAnOptionalOfTheRightGame(){
+        Deck deck1 = new Deck(List.of(dummyCard1, dummyCard2));
+        Deck deck2 = new Deck(List.of(dummyCard3, dummyCard4));
+
+        Game testGame = new Game(deck1, deck2);
+        String id = testGame.getId();
+
+        when(gameRepo.findById(id)).thenReturn(Optional.of(testGame));
+
+        Optional<Game> optionalGame = gameService.getGameById(id);
+
+        verify(gameRepo).findById(id);
+        assertEquals(Optional.of(testGame), optionalGame);
+    }
+
+    @Test
+    void getGameById_shouldReturnEmptyOptional_WhenTheIdIsNotFound(){
+        when(gameRepo.findById("quatschId")).thenReturn(Optional.empty());
+
+        Optional<Game> optionalGame = gameService.getGameById("quatschId");
+
+        verify(gameRepo).findById("quatschId");
+        assertEquals(Optional.empty(), optionalGame);
     }
 }

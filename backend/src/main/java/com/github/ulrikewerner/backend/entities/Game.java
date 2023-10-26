@@ -1,9 +1,6 @@
 package com.github.ulrikewerner.backend.entities;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -16,10 +13,10 @@ public class Game {
     private Deck opponentCards;
     private boolean isFinished;
 
-    public Game(Deck player, Deck opponent) {
+    public Game(Deck playerCards, Deck opponentCards) {
         isPlayerTurn = true;
-        playerCards = player;
-        opponentCards = opponent;
+        this.playerCards = playerCards;
+        this.opponentCards = opponentCards;
         isFinished = false;
     }
 }

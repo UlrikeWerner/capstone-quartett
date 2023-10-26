@@ -1,8 +1,10 @@
 package com.github.ulrikewerner.backend.entities;
 
+import java.util.ArrayList;
+
 public record Card(
         String id,
-        String team,
-        float pointsPerGame
+        String name,
+        ArrayList<CardAttribute> attributes
 ) {
 }

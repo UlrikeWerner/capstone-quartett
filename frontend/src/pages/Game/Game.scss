@@ -1,0 +1,50 @@
+@use "src/styles/color";
+
+.gameBoard {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1.5fr 1fr;
+  grid-template-areas:
+    ".          score      score        ."
+    ".          info       info         ."
+    "playerDeck playerCard opponentCard opponentDeck";
+}
+
+.infoField {
+  grid-area: info;
+}
+
+.deck {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 60vh;
+  background-color: transparent;
+}
+
+.player-deck {
+  grid-area: playerDeck;
+  border-right: 2px solid color.$border-color;
+}
+
+.player-card {
+  grid-area: playerCard;
+}
+
+.opponent-deck {
+  grid-area: opponentDeck;
+  border-left: 2px solid color.$border-color;
+}
+
+.opponent-card {
+  grid-area: opponentCard;
+}
+
+.vs {
+  position: absolute;
+  left: 0;
+  translate: -50%;
+  font-weight: bold;
+  font-size: 3rem;
+}

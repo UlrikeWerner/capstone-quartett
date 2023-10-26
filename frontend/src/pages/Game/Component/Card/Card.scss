@@ -1,0 +1,67 @@
+@use "src/styles/color";
+
+.card {
+  min-width: 14rem;
+  aspect-ratio: 3 / 4;
+  border-radius: 1rem;
+  border: 2px solid color.$border-color;
+}
+
+.card-absolute {
+  position: absolute;
+}
+
+.card-clickable {
+  cursor: pointer;
+  &:is(:hover, :focus){
+    scale: 1.1;
+    rotate: 2deg;
+    transform: translateX(10%);
+  }
+}
+
+.card-display-none {
+  display: none;
+}
+
+.card-player {
+  background-color: color.$player;
+  transition: all 500ms ease;
+}
+
+.card-opponent {
+  background-color: color.$opponent;
+}
+
+.card-content {
+  background-color: color.$card-content;
+
+  h3 {
+    color: color.$font-color-25-black;
+    text-align: center;
+  }
+
+  .attributes-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 1rem 0 1rem;
+
+    p {
+      margin: 0;
+      font-weight: bold;
+      color: color.$font-color-45-black;
+    }
+  }
+}
+
+.border-player {
+  border: 2px solid color.$player;
+}
+
+.border-opponent {
+  border: 2px solid color.$opponent;
+}
+
+.card-isEmpty {
+  background-color: transparent;
+}

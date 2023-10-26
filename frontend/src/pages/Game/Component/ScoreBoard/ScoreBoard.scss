@@ -1,0 +1,34 @@
+@use "src/styles/color";
+
+.score {
+  grid-area: score;
+  font-size: 1.25rem;
+  padding: 0.5rem 5rem;
+
+  :is(.playerScore, .opponentScore) {
+    flex-grow: 1;
+    border-top: 2px solid color.$score-border;
+    border-bottom: 2px solid color.$score-border;
+    padding: 0.5rem 1.75rem;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .playerScore {
+    background-color: color.$player;
+    border-right: 1px solid color.$score-border;
+    border-left: 2px solid color.$score-border;
+    border-top-left-radius: 1.6rem 50%;
+    border-bottom-left-radius: 1.6rem 50%;
+  }
+
+  .opponentScore {
+    background-color: color.$opponent;
+    border-right: 2px solid color.$score-border;
+    border-left: 1px solid color.$score-border;
+    border-top-right-radius: 1.6rem 50%;
+    border-bottom-right-radius: 1.6rem 50%;
+  }
+}
