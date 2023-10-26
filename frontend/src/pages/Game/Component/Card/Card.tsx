@@ -32,10 +32,10 @@ export default function Card(props: CardDeckProps) {
                 props.cardContent?.attributes &&
                 Object.entries(props.cardContent.attributes)
                     .map((attribute: [string, string]) =>
-                        <div className="attributes-wrapper" key={attribute[0]}>
+                        <button className={"attributes-wrapper attributes-border-" + props.owner} type="button" key={attribute[0]}>
                             <p>{attribute[0]}</p>
                             <p>{attribute[1]}</p>
-                        </div>
+                        </button>
                     )
             }
         </div>);

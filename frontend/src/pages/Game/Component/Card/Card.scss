@@ -44,13 +44,35 @@
   .attributes-wrapper {
     display: flex;
     justify-content: space-between;
-    margin: 0 1rem 0 1rem;
+    margin: 0 0.5rem 0.125rem 0.5rem;
+    padding: 0.125rem;
+    width: 90%;
+    background-color: transparent;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
 
     p {
       margin: 0;
       font-weight: bold;
       color: color.$font-color-45-black;
     }
+  }
+}
+
+.attributes-border-player {
+  &:is(:hover, :focus) {
+    outline: 2px solid color.$player;
+    outline-offset: .125rem;
+    border-radius: 0.25rem;
+  }
+}
+
+.attributes-border-opponent {
+  &:is(:hover, :focus) {
+    outline: 2px solid color.$opponent;
+    outline-offset: .125rem;
+    border-radius: 0.25rem;
   }
 }
 

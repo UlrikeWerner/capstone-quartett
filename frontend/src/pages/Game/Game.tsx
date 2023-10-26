@@ -3,10 +3,10 @@ import axios from "axios";
 import {useEffect, useState} from "react";
 import {GameStateDTO} from "../../types/GameStateDTO.ts";
 import "./Game.scss";
-import ScoreBoard from "./Component/ScoreBoard/ScoreBoard.tsx";
-import Card from "./Component/Card/Card.tsx";
-import Info from "./Component/Info/Info.tsx";
 import {GAME_INFO_TEXTS, getStartText} from "../../types/Game_Info_Texts.ts";
+import ScoreBoard from "./Component/ScoreBoard/ScoreBoard.tsx";
+import Info from "./Component/Info/Info.tsx";
+import Card from "./Component/Card/Card.tsx";
 
 export default function Game() {
     const {id} = useParams();
