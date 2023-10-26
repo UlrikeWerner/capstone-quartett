@@ -4,9 +4,7 @@ import com.github.ulrikewerner.backend.entities.Card;
 import com.github.ulrikewerner.backend.entities.CardAttribute;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 public class CardDTO {
@@ -19,7 +17,7 @@ public class CardDTO {
     }
 
     private void setAttributes(ArrayList<CardAttribute> attributeList) {
-        this.attributes = new HashMap<>();
+        this.attributes = new LinkedHashMap<>();
         for(CardAttribute attribute : attributeList){
             if(attribute.isDecimal()){
                 attributes.put(attribute.name(), Double.toString(attribute.value() / 100.0));
