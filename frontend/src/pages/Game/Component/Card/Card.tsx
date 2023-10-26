@@ -19,10 +19,10 @@ export default function Card(props: CardDeckProps) {
         }
         if(props.type === "movingCard"){
             return(
-                <div className={"card card-absolute card-" +props.owner + " " +
-                                (props.isClickable ? "card-clickable" : "card-display-none")}
-                                onClick={cardClick}>
-                </div>);
+                <button className={"card-button card card-absolute card-" +props.owner + " " +
+                    (props.isClickable ? "card-clickable" : "card-display-none")}
+                        type="button" onClick={cardClick}>
+                </button>);
         }
 
         return(
