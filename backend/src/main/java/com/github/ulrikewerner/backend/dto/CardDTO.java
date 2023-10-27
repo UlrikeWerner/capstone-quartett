@@ -2,6 +2,7 @@ package com.github.ulrikewerner.backend.dto;
 
 import com.github.ulrikewerner.backend.entities.Card;
 import com.github.ulrikewerner.backend.entities.CardAttribute;
+import com.github.ulrikewerner.backend.entities.NflLogoAcronym;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.Map;
 @Getter
 public class CardDTO {
     private final String name;
-    private final String logo;
+    private final NflLogoAcronym logo;
     private final Map<String, String> attributes = new LinkedHashMap<>();
 
     public CardDTO(Card card) {

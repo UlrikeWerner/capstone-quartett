@@ -1,9 +1,6 @@
 package com.github.ulrikewerner.backend.serviceTests;
 
-import com.github.ulrikewerner.backend.entities.Card;
-import com.github.ulrikewerner.backend.entities.CardAttribute;
-import com.github.ulrikewerner.backend.entities.Deck;
-import com.github.ulrikewerner.backend.entities.Game;
+import com.github.ulrikewerner.backend.entities.*;
 import com.github.ulrikewerner.backend.repositories.GameRepo;
 import com.github.ulrikewerner.backend.services.CardService;
 import com.github.ulrikewerner.backend.services.GameService;
@@ -22,11 +19,11 @@ class GameServiceTest {
     CardService cardservice = mock(CardService.class);
     GameService gameService = new GameService(cardservice, gameRepo);
 
-    private final CardAttribute dummyCardAttribute = new CardAttribute("test", 1223, true);
-    private final Card dummyCard1 = new Card("1", "Team1", new ArrayList<>(List.of(dummyCardAttribute)));
-    private final Card dummyCard2 = new Card("2", "Team2", new ArrayList<>(List.of(dummyCardAttribute)));
-    private final Card dummyCard3 = new Card("3", "Team3", new ArrayList<>(List.of(dummyCardAttribute)));
-    private final Card dummyCard4 = new Card("4", "Team3", new ArrayList<>(List.of(dummyCardAttribute)));
+    private final CardAttribute dummyCardAttribute = new CardAttribute("test", 1223, true, true);
+    private final Card dummyCard1 = new Card("1", "Team1", NflLogoAcronym.NFL, new ArrayList<>(List.of(dummyCardAttribute)));
+    private final Card dummyCard2 = new Card("2", "Team2", NflLogoAcronym.ARI, new ArrayList<>(List.of(dummyCardAttribute)));
+    private final Card dummyCard3 = new Card("3", "Team3", NflLogoAcronym.BAL, new ArrayList<>(List.of(dummyCardAttribute)));
+    private final Card dummyCard4 = new Card("4", "Team3", NflLogoAcronym.ATL, new ArrayList<>(List.of(dummyCardAttribute)));
 
     @Test
     void startNewGame_expectOneGame() {

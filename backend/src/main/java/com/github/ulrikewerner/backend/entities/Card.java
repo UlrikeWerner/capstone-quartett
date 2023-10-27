@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public record Card(
         String id,
         String name,
-        String logo,
+        NflLogoAcronym logo,
         ArrayList<CardAttribute> attributes
 ) {
 }

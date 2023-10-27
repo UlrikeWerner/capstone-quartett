@@ -1,10 +1,7 @@
 package com.github.ulrikewerner.backend.integrationTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.ulrikewerner.backend.entities.Card;
-import com.github.ulrikewerner.backend.entities.CardAttribute;
-import com.github.ulrikewerner.backend.entities.Deck;
-import com.github.ulrikewerner.backend.entities.Game;
+import com.github.ulrikewerner.backend.entities.*;
 import com.github.ulrikewerner.backend.repositories.GameRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,14 +61,14 @@ class GameControllerIntegrationTest {
     @Test
     @DirtiesContext
     void getGameState_expectGameStateDTOFromTheRightGame() throws Exception {
-        CardAttribute kansasCardAttribute = new CardAttribute("Punkte pro Spiel", 2918, true);
-        Card kansas = new Card("1", "Kansas City Chiefs", new ArrayList<>(List.of(kansasCardAttribute)));
+        CardAttribute kansasCardAttribute = new CardAttribute("Punkte pro Spiel", 2918, true, true);
+        Card kansas = new Card("1", "Kansas City Chiefs", NflLogoAcronym.KC, new ArrayList<>(List.of(kansasCardAttribute)));
 
-        CardAttribute piladelphiaCardAttribute = new CardAttribute("Punkte pro Spiel", 2806, true);
-        Card philadelphia = new Card("2", "Philadelphia Eagles", new ArrayList<>(List.of(piladelphiaCardAttribute)));
+        CardAttribute piladelphiaCardAttribute = new CardAttribute("Punkte pro Spiel", 2806, true, true);
+        Card philadelphia = new Card("2", "Philadelphia Eagles", NflLogoAcronym.PHI, new ArrayList<>(List.of(piladelphiaCardAttribute)));
 
-        CardAttribute detroitCardAttribute = new CardAttribute("Punkte pro Spiel", 2665, true);
-        Card detroit = new Card("1", "Detroit Lions", new ArrayList<>(List.of(detroitCardAttribute)));
+        CardAttribute detroitCardAttribute = new CardAttribute("Punkte pro Spiel", 2665, true, true);
+        Card detroit = new Card("1", "Detroit Lions", NflLogoAcronym.DET, new ArrayList<>(List.of(detroitCardAttribute)));
 
         Deck playerDeck = new Deck(List.of(detroit, kansas));
         Deck opponentDeck = new Deck(List.of(philadelphia));
@@ -88,6 +85,7 @@ class GameControllerIntegrationTest {
                             "nextTurnBy": "PLAYER",
                             "nextPlayerCard": {
                                 "name": "Detroit Lions",
+                                "logo": "DET",
                                 "attributes": {
                                     "Punkte pro Spiel": "26.65"
                                 }
