@@ -11,8 +11,8 @@ import lombok.Setter;
 public class TurnDTO extends GameStateDTO{
     private String category;
     private TurnWinner turnWinner;
-    private Card playerCard;
-    private Card opponentCard;
+    private CardDTO playerCard;
+    private CardDTO opponentCard;
 
     public TurnDTO(Game game) {
         super(game);
@@ -22,7 +22,7 @@ public class TurnDTO extends GameStateDTO{
         super(game);
         this.category = category;
         this.turnWinner = turnWinner;
-        this.playerCard = playerCard;
-        this.opponentCard = opponentCard;
+        this.playerCard = new CardDTO(playerCard);
+        this.opponentCard = new CardDTO(opponentCard);
     }
 }

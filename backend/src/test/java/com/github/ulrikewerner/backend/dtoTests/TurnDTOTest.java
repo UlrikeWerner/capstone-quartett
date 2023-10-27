@@ -52,7 +52,10 @@ class TurnDTOTest {
         assertEquals("25.42", testTurnStateDTO.getNextPlayerCard().getAttributes().get("test"));
         assertEquals("test", testTurnStateDTO.getCategory());
         assertEquals(TurnWinner.DRAW, testTurnStateDTO.getTurnWinner());
-        assertEquals(flensburgCard, testTurnStateDTO.getPlayerCard());
-        assertEquals(kielCard, testTurnStateDTO.getOpponentCard());
+
+        assertNotNull(testTurnStateDTO.getPlayerCard());
+        assertEquals("Flensburg Seemöwen", testTurnStateDTO.getPlayerCard().getName());
+        assertNotNull(testTurnStateDTO.getOpponentCard());
+        assertEquals("Kieler Seemuscheln", testTurnStateDTO.getOpponentCard().getName());
     }
 }
