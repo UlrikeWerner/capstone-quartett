@@ -38,7 +38,10 @@ class GameControllerIntegrationTest {
     private final Card philadelphia = new Card("2", "Philadelphia Eagles", NflLogoAcronym.PHI, new ArrayList<>(List.of(piladelphiaCardAttribute)));
     private final CardAttribute detroitCardAttribute = new CardAttribute("Punkte pro Spiel", 2665, true, true);
     private final Card detroit = new Card("1", "Detroit Lions", NflLogoAcronym.DET, new ArrayList<>(List.of(detroitCardAttribute)));
+    private final CardAttribute wrongCardAttribute = new CardAttribute("Punkte", 2665, true, true);
+    private final Card wrongCard = new Card("1", "Detroit Lions", NflLogoAcronym.DET, new ArrayList<>(List.of(wrongCardAttribute)));
     private final Deck playerDeck = new Deck(List.of(detroit, kansas));
+    private final Deck wrongCategoryDeck = new Deck(List.of(wrongCard));
     private final Deck opponentDeck = new Deck(List.of(philadelphia));
 
     @Test
@@ -107,12 +110,36 @@ class GameControllerIntegrationTest {
 
     @Test
     @DirtiesContext
-    void getTurnResult_expectCategoryNotFoundException() throws Exception {
+    void getTurnResult_expectCategoryNotFoundException_WhenPlayerCardHasNotTheCategory() throws Exception {
+        Game testGame = gameRepo.save(new Game(wrongCategoryDeck, opponentDeck));
+
+        mockMvc.perform(put("/api/game/" + testGame.getId())
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .content("Punkte pro Spiel"))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().reason("Kategorie konnte nicht gefunden werden!"));
+    }
+
+    @Test
+    @DirtiesContext
+    void getTurnResult_expectCategoryNotFoundException_WhenOpponentCardHasNotTheCategory() throws Exception {
+        Game testGame = gameRepo.save(new Game(playerDeck, wrongCategoryDeck));
+
+        mockMvc.perform(put("/api/game/" + testGame.getId())
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .content("Punkte pro Spiel"))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().reason("Kategorie konnte nicht gefunden werden!"));
+    }
+
+    @Test
+    @DirtiesContext
+    void getTurnResult_expectCategoryNotFoundException_WhenCategoryIsBlank() throws Exception {
         Game testGame = gameRepo.save(new Game(playerDeck, opponentDeck));
 
         mockMvc.perform(put("/api/game/" + testGame.getId())
                         .contentType(MediaType.TEXT_PLAIN)
-                        .content("Yards"))
+                        .content(" "))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(status().reason("Kategorie konnte nicht gefunden werden!"));
     }
