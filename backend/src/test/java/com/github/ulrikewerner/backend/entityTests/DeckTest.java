@@ -113,4 +113,17 @@ class DeckTest {
 
         assertEquals(Optional.empty(), optionalCard);
     }
+
+    @Test
+    void Deck_addCardToBottom_shouldAddCardOneTheRightPosition() {
+        List<Card> cardList = List.of(dummyCard1);
+        Deck cardDeck = new Deck(cardList);
+
+        assertEquals(1, cardDeck.size());
+
+        cardDeck.addCardToBottom(dummyCard2);
+
+        assertEquals(2, cardDeck.size());
+        assertEquals(dummyCard2, cardDeck.getCards().get(cardDeck.size()-1));
+    }
 }
