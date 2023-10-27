@@ -39,4 +39,8 @@ public class Deck {
         cards.remove(0);
         return Optional.of(card);
     }
+
+    public void addCardToBottom(Card card){
+        cards.add(card);
+    }
 }
