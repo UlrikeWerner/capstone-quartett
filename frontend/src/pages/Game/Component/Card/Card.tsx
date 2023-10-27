@@ -20,7 +20,6 @@ export default function Card(props: CardDeckProps) {
             return (
                 <div className={"card card-" + (props.score && props.score > 1 ? props.owner : "isEmpty")}>
                     { props.score && props.score > 1 &&
-                        // NOSONAR
                         <NFLIcons.NFL size={200} />
                     }
                 </div>);
@@ -31,7 +30,6 @@ export default function Card(props: CardDeckProps) {
                     (props.isClickable ? "card-clickable" : "card-display-none")}
                         type="button" onClick={cardClick}>
                     { props.score && props.score > 1 &&
-                        // NOSONAR
                         <NFLIcons.NFL size={200} />
                     }
                 </button>);
