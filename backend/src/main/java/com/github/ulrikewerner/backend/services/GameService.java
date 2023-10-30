@@ -1,5 +1,6 @@
 package com.github.ulrikewerner.backend.services;
 
+import com.github.ulrikewerner.backend.dto.PlayerTurnInputDTO;
 import com.github.ulrikewerner.backend.dto.TurnDTO;
 import com.github.ulrikewerner.backend.entities.Card;
 import com.github.ulrikewerner.backend.entities.Deck;
@@ -42,15 +43,16 @@ public class GameService {
         return gameRepo.findById(id);
     }
 
-    public TurnDTO getPlayerTurnResult(String gameId, String category)
+    public TurnDTO getPlayerTurnResult(String gameId, PlayerTurnInputDTO category)
             throws GameNotFoundException, CategoryNotFoundException, NotYourTurnException {
+
         Game currentGame = getGameById(gameId).orElseThrow(()-> new GameNotFoundException(gameId));
         if(!currentGame.isPlayerTurn()){
             throw new NotYourTurnException();
         }
         Card playerCard = currentGame.getPlayerCards().drawFirstCard().orElseThrow();
         Card opponentCard = currentGame.getOpponentCards().drawFirstCard().orElseThrow();
-        TurnWinner winner = cardService.compare(playerCard, opponentCard, category);
+        TurnWinner winner = cardService.compare(playerCard, opponentCard, category.toString());
         switch (winner) {
             case DRAW -> {
                 currentGame.getPlayerCards().addCardToBottom(playerCard);
@@ -67,6 +69,6 @@ public class GameService {
         }
         currentGame.setPlayerTurn(false);
         Game savedGame = gameRepo.save(currentGame);
-        return new TurnDTO(savedGame, category, winner, playerCard, opponentCard);
+        return new TurnDTO(savedGame, category.toString(), winner, playerCard, opponentCard);
     }
 }

@@ -102,10 +102,14 @@ class GameControllerIntegrationTest {
         String id = "quatschId";
 
         mockMvc.perform(put("/api/game/" + id)
-                        .contentType(MediaType.TEXT_PLAIN)
-                        .content("Touchdowns"))
-                .andExpect(status().isNotFound())
-                .andExpect(status().reason("Spiel wurde nicht gefunden!"));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                            "category": "Touchdowns"
+                        }
+                        """))
+                        .andExpect(status().isNotFound())
+                        .andExpect(status().reason("Spiel wurde nicht gefunden!"));
     }
 
     @Test
@@ -114,8 +118,12 @@ class GameControllerIntegrationTest {
         Game testGame = gameRepo.save(new Game(wrongCategoryDeck, opponentDeck));
 
         mockMvc.perform(put("/api/game/" + testGame.getId())
-                        .contentType(MediaType.TEXT_PLAIN)
-                        .content("Punkte pro Spiel"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "category": "Punkte pro Spiel"
+                                }
+                                """))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(status().reason("Kategorie konnte nicht gefunden werden!"));
     }
@@ -126,8 +134,12 @@ class GameControllerIntegrationTest {
         Game testGame = gameRepo.save(new Game(playerDeck, wrongCategoryDeck));
 
         mockMvc.perform(put("/api/game/" + testGame.getId())
-                        .contentType(MediaType.TEXT_PLAIN)
-                        .content("Punkte pro Spiel"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "category": "Punkte pro Spiel"
+                                }
+                                """))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(status().reason("Kategorie konnte nicht gefunden werden!"));
     }
@@ -138,8 +150,12 @@ class GameControllerIntegrationTest {
         Game testGame = gameRepo.save(new Game(playerDeck, opponentDeck));
 
         mockMvc.perform(put("/api/game/" + testGame.getId())
-                        .contentType(MediaType.TEXT_PLAIN)
-                        .content(" "))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "category": " "
+                                }
+                                """))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(status().reason("Kategorie konnte nicht gefunden werden!"));
     }
@@ -152,8 +168,12 @@ class GameControllerIntegrationTest {
         Game testGame = gameRepo.save(game);
 
         mockMvc.perform(put("/api/game/" + testGame.getId())
-                        .contentType(MediaType.TEXT_PLAIN)
-                        .content("Touchdowns"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "category": "Touchdowns"
+                                }
+                                """))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(status().reason("Es ist nicht dein Zug!"));
     }
@@ -175,40 +195,44 @@ class GameControllerIntegrationTest {
         Game testGame = gameRepo.save(new Game(playerDeck, opponentDeck));
 
         mockMvc.perform(put("/api/game/" + testGame.getId())
-                        .contentType(MediaType.TEXT_PLAIN)
-                        .content("Punkte pro Spiel"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "category": "Punkte pro Spiel"
+                                }
+                                """))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-                         {
-                            "score": {
-                                "opponent": 2,
-                                "player": 1
-                            },
-                            "nextTurnBy": "OPPONENT",
-                            "nextPlayerCard": {
-                                "name": "Kansas City Chiefs",
-                                "logo": "KC",
-                                "attributes": {
-                                    "Punkte pro Spiel": "29.18"
-                                }
-                            },
-                            "category": "Punkte pro Spiel",
-                            "turnWinner": "OPPONENT",
-                            "playerCard": {
-                                "name": "Detroit Lions",
-                                "logo": "DET",
-                                "attributes": {
-                                    "Punkte pro Spiel": "26.65"
-                                }
-                            },
-                            "opponentCard": {
-                                "name": "Philadelphia Eagles",
-                                "logo": "PHI",
-                                "attributes": {
-                                    "Punkte pro Spiel": "28.06"
-                                }
-                            }
-                         }
-                """));
+                                 {
+                                    "score": {
+                                        "opponent": 2,
+                                        "player": 1
+                                    },
+                                    "nextTurnBy": "OPPONENT",
+                                    "nextPlayerCard": {
+                                        "name": "Kansas City Chiefs",
+                                        "logo": "KC",
+                                        "attributes": {
+                                            "Punkte pro Spiel": "29.18"
+                                        }
+                                    },
+                                    "category": "Punkte pro Spiel",
+                                    "turnWinner": "OPPONENT",
+                                    "playerCard": {
+                                        "name": "Detroit Lions",
+                                        "logo": "DET",
+                                        "attributes": {
+                                            "Punkte pro Spiel": "26.65"
+                                        }
+                                    },
+                                    "opponentCard": {
+                                        "name": "Philadelphia Eagles",
+                                        "logo": "PHI",
+                                        "attributes": {
+                                            "Punkte pro Spiel": "28.06"
+                                        }
+                                    }
+                                 }
+                        """));
     }
 }

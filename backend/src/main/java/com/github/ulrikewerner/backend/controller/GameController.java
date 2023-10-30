@@ -1,6 +1,7 @@
 package com.github.ulrikewerner.backend.controller;
 
 import com.github.ulrikewerner.backend.dto.GameStateDTO;
+import com.github.ulrikewerner.backend.dto.PlayerTurnInputDTO;
 import com.github.ulrikewerner.backend.dto.TurnDTO;
 import com.github.ulrikewerner.backend.entities.Game;
 import com.github.ulrikewerner.backend.exception.CategoryNotFoundException;
@@ -34,7 +35,7 @@ public class GameController {
     }
 
     @PutMapping("/{gameId}")
-    public ResponseEntity<TurnDTO> getTurnResult(@PathVariable String gameId, @RequestBody String category)
+    public ResponseEntity<TurnDTO> getTurnResult(@PathVariable String gameId, @RequestBody PlayerTurnInputDTO category)
             throws GameNotFoundException, CategoryNotFoundException, NotYourTurnException {
         return ResponseEntity.ok(gameService.getPlayerTurnResult(gameId, category));
     }
