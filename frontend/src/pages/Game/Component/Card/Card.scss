@@ -62,7 +62,6 @@
     background-color: transparent;
     border: none;
     font-size: 1rem;
-    cursor: pointer;
 
     p {
       margin: 0;
@@ -77,6 +76,7 @@
     outline: 2px solid color.$player;
     outline-offset: .125rem;
     border-radius: 0.25rem;
+    cursor: pointer;
   }
 }
 
@@ -85,6 +85,7 @@
     outline: 2px solid color.$opponent;
     outline-offset: .125rem;
     border-radius: 0.25rem;
+    cursor: pointer;
   }
 }
 
