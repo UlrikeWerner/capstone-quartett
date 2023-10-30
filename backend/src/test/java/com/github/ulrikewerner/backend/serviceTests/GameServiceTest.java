@@ -16,8 +16,8 @@ import static org.mockito.Mockito.*;
 class GameServiceTest {
 
     GameRepo gameRepo = mock(GameRepo.class);
-    CardService cardservice = mock(CardService.class);
-    GameService gameService = new GameService(cardservice, gameRepo);
+    CardService cardService = mock(CardService.class);
+    GameService gameService = new GameService(cardService, gameRepo);
 
     private final CardAttribute dummyCardAttribute = new CardAttribute("test", 1223, true, true);
     private final Card dummyCard1 = new Card("1", "Team1", NflLogoAcronym.NFL, new ArrayList<>(List.of(dummyCardAttribute)));
@@ -40,7 +40,7 @@ class GameServiceTest {
         newGame.setPlayerTurn(true);
         newGame.setFinished(false);
 
-        when(cardservice.getAllCards()).thenReturn(cardList2);
+        when(cardService.getAllCards()).thenReturn(cardList2);
         when(gameRepo.save(any(Game.class))).thenAnswer(invocation -> {
             Game savedGame = invocation.getArgument(0);
             savedGame.setId(newGame.getId());
@@ -49,7 +49,7 @@ class GameServiceTest {
 
         Game actualGame= gameService.startNewGame();
 
-        verify(cardservice).getAllCards();
+        verify(cardService).getAllCards();
         verify(gameRepo).save(any(Game.class));
         assertEquals(newGame.getId(), actualGame.getId());
         assertEquals(newGame.getPlayerCards().size(), actualGame.getPlayerCards().size());

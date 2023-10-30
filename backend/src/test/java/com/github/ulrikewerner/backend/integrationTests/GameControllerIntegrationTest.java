@@ -40,9 +40,9 @@ class GameControllerIntegrationTest {
     private final Card detroit = new Card("1", "Detroit Lions", NflLogoAcronym.DET, new ArrayList<>(List.of(detroitCardAttribute)));
     private final CardAttribute wrongCardAttribute = new CardAttribute("Punkte", 2665, true, true);
     private final Card wrongCard = new Card("1", "Detroit Lions", NflLogoAcronym.DET, new ArrayList<>(List.of(wrongCardAttribute)));
-    private final Deck playerDeck = new Deck(List.of(detroit, kansas));
+    private final Deck winnerDeck = new Deck(List.of(detroit, kansas));
+    private final Deck loserDeck = new Deck(List.of(philadelphia));
     private final Deck wrongCategoryDeck = new Deck(List.of(wrongCard));
-    private final Deck opponentDeck = new Deck(List.of(philadelphia));
 
     @Test
     @DirtiesContext
@@ -74,7 +74,7 @@ class GameControllerIntegrationTest {
     @Test
     @DirtiesContext
     void getGameState_expectGameStateDTOFromTheRightGame() throws Exception {
-        Game testGame = gameRepo.save(new Game(playerDeck, opponentDeck));
+        Game testGame = gameRepo.save(new Game(winnerDeck, loserDeck));
 
         mockMvc.perform(get("/api/game/" + testGame.getId()))
                 .andExpect(status().isOk())
@@ -115,7 +115,7 @@ class GameControllerIntegrationTest {
     @Test
     @DirtiesContext
     void getTurnResult_expectCategoryNotFoundException_WhenPlayerCardHasNotTheCategory() throws Exception {
-        Game testGame = gameRepo.save(new Game(wrongCategoryDeck, opponentDeck));
+        Game testGame = gameRepo.save(new Game(wrongCategoryDeck, loserDeck));
 
         mockMvc.perform(put("/api/game/" + testGame.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -131,7 +131,7 @@ class GameControllerIntegrationTest {
     @Test
     @DirtiesContext
     void getTurnResult_expectCategoryNotFoundException_WhenOpponentCardHasNotTheCategory() throws Exception {
-        Game testGame = gameRepo.save(new Game(playerDeck, wrongCategoryDeck));
+        Game testGame = gameRepo.save(new Game(winnerDeck, wrongCategoryDeck));
 
         mockMvc.perform(put("/api/game/" + testGame.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -147,7 +147,7 @@ class GameControllerIntegrationTest {
     @Test
     @DirtiesContext
     void getTurnResult_expectCategoryNotFoundException_WhenCategoryIsBlank() throws Exception {
-        Game testGame = gameRepo.save(new Game(playerDeck, opponentDeck));
+        Game testGame = gameRepo.save(new Game(winnerDeck, loserDeck));
 
         mockMvc.perform(put("/api/game/" + testGame.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -163,7 +163,7 @@ class GameControllerIntegrationTest {
     @Test
     @DirtiesContext
     void getTurnResult_expectNotYourTurnException() throws Exception {
-        Game game = new Game(playerDeck, opponentDeck);
+        Game game = new Game(winnerDeck, loserDeck);
         game.setPlayerTurn(false);
         Game testGame = gameRepo.save(game);
 
@@ -181,7 +181,7 @@ class GameControllerIntegrationTest {
     @Test
     @DirtiesContext
     void getTurnResult_expectBadRequestException_WhenTheBodyIsEmpty() throws Exception {
-        Game game = new Game(playerDeck, opponentDeck);
+        Game game = new Game(winnerDeck, loserDeck);
         game.setPlayerTurn(false);
         Game testGame = gameRepo.save(game);
 
@@ -191,8 +191,55 @@ class GameControllerIntegrationTest {
 
     @Test
     @DirtiesContext
-    void getTurnResult_expectTurnDTO() throws Exception {
-        Game testGame = gameRepo.save(new Game(playerDeck, opponentDeck));
+    void getTurnResult_expectTurnDTO_withPlayerAsTurnWinner() throws Exception {
+        Game testGame = gameRepo.save(new Game(loserDeck, winnerDeck));
+
+        mockMvc.perform(put("/api/game/" + testGame.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "category": "Punkte pro Spiel"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                                 {
+                                    "score": {
+                                        "opponent": 1,
+                                        "player": 2
+                                    },
+                                    "nextTurnBy": "OPPONENT",
+                                    "nextPlayerCard": {
+                                        "name": "Philadelphia Eagles",
+                                        "logo": "PHI",
+                                        "attributes": {
+                                            "Punkte pro Spiel": "28.06"
+                                        }
+                                    },
+                                    "category": "Punkte pro Spiel",
+                                    "turnWinner": "PLAYER",
+                                    "playerCard": {
+                                        "name": "Philadelphia Eagles",
+                                        "logo": "PHI",
+                                        "attributes": {
+                                            "Punkte pro Spiel": "28.06"
+                                        }
+                                    },
+                                    "opponentCard": {
+                                    "name": "Detroit Lions",
+                                        "logo": "DET",
+                                        "attributes": {
+                                            "Punkte pro Spiel": "26.65"
+                                        }
+                                    }
+                                }
+                        """));
+    }
+
+    @Test
+    @DirtiesContext
+    void getTurnResult_expectTurnDTO_withOpponentAsTurnWinner() throws Exception {
+        Game testGame = gameRepo.save(new Game(winnerDeck, loserDeck));
 
         mockMvc.perform(put("/api/game/" + testGame.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -230,6 +277,53 @@ class GameControllerIntegrationTest {
                                         "logo": "PHI",
                                         "attributes": {
                                             "Punkte pro Spiel": "28.06"
+                                        }
+                                    }
+                                 }
+                        """));
+    }
+
+    @Test
+    @DirtiesContext
+    void getTurnResult_expectTurnDTO_whenItIsDraw() throws Exception {
+        Game testGame = gameRepo.save(new Game(winnerDeck, winnerDeck));
+
+        mockMvc.perform(put("/api/game/" + testGame.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "category": "Punkte pro Spiel"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                                 {
+                                    "score": {
+                                        "opponent": 2,
+                                        "player": 2
+                                    },
+                                    "nextTurnBy": "OPPONENT",
+                                    "nextPlayerCard": {
+                                        "name": "Kansas City Chiefs",
+                                        "logo": "KC",
+                                        "attributes": {
+                                            "Punkte pro Spiel": "29.18"
+                                        }
+                                    },
+                                    "category": "Punkte pro Spiel",
+                                    "turnWinner": "DRAW",
+                                    "playerCard": {
+                                        "name": "Detroit Lions",
+                                        "logo": "DET",
+                                        "attributes": {
+                                            "Punkte pro Spiel": "26.65"
+                                        }
+                                    },
+                                    "opponentCard": {
+                                        "name": "Detroit Lions",
+                                        "logo": "DET",
+                                        "attributes": {
+                                            "Punkte pro Spiel": "26.65"
                                         }
                                     }
                                  }
