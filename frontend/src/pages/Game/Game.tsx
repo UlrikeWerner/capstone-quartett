@@ -56,7 +56,6 @@ export default function Game() {
                 if(!response.data.playerCard){
                     setRunningGameState({...response.data, playerCard: response.data.nextPlayerCard});
                 }
-
                 setGameState(response.data);
             })
             .then(() => {
@@ -101,6 +100,9 @@ export default function Game() {
             setInstructionText(GAME_INFO_TEXTS.startChooseCategoryInfo);
             setOpponentCardIsLaidOut(true);
         }else {
+            if(runningGameState){
+                setRunningGameState({...runningGameState, playerCard: runningGameState.nextPlayerCard});
+            }
             setInfoText("");
             setInstructionText("");
             setOpponentCardIsLaidOut(true);
@@ -128,7 +130,6 @@ export default function Game() {
                                 <Info infoText={infoText} instructionText={instructionText} />
                             </section>
 
-                            {/*Deck Player*/}
                             <section className="deck player-deck">
                                 <Card type="deck"
                                       owner="player"
@@ -143,7 +144,6 @@ export default function Game() {
                                       drawCard={drawCard}/>
                             </section>
 
-                            {/*Player Card*/}
                             <section className="deck player-card">
                                 <Card type="deck"
                                       owner="player"
@@ -158,7 +158,6 @@ export default function Game() {
                                 />
                             </section>
 
-                            {/*Opponent Card*/}
                             <section className="deck opponent-card">
                                 <Card type="deck"
                                       owner="opponent"
@@ -173,7 +172,6 @@ export default function Game() {
                                 <p className="vs">VS</p>
                             </section>
 
-                            {/*Deck Opponent*/}
                             <section className="deck opponent-deck">
                                 <Card type="deck"
                                       owner="opponent"
