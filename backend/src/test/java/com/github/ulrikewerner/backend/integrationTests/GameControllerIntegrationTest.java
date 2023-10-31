@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -328,5 +328,65 @@ class GameControllerIntegrationTest {
                                     }
                                  }
                         """));
+    }
+
+    @Test
+    @DirtiesContext
+    void getOpponentTurnResult_expectTurnDTO() throws Exception {
+        CardAttribute attribute1Card1 = new CardAttribute("test1", 23, false, true);
+        CardAttribute attribute1Card2 = new CardAttribute("test1", 13, false, true);
+        CardAttribute attribute2Card1 = new CardAttribute("test2", 2323, true, false);
+        CardAttribute attribute2Card2 = new CardAttribute("test2", 1323, true, false);
+        Card card1 = new Card("1", "card1", NflLogoAcronym.DET, new ArrayList<>(List.of(attribute1Card1, attribute2Card1)));
+        Card card2 = new Card("2", "card2", NflLogoAcronym.NO, new ArrayList<>(List.of(attribute1Card2, attribute2Card2)));
+        Game newGame = new Game(new Deck(List.of(card1, card2)), new Deck(List.of(card2, card1)));
+        newGame.setPlayerTurn(false);
+        Game testGame = gameRepo.save(newGame);
+
+        mockMvc.perform(get("/api/game/" + testGame.getId() + "/opponentTurn"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                                 {
+                                    "nextTurnBy": "PLAYER",
+                                    "nextPlayerCard": {
+                                        "name": "card2",
+                                        "logo": "NO",
+                                        "attributes": {
+                                            "test1": "13",
+                                            "test2": "13.23"
+                                        }
+                                    },
+                                    "playerCard": {
+                                        "name": "card1",
+                                        "logo": "DET",
+                                        "attributes": {
+                                            "test1": "23",
+                                            "test2": "23.23"
+                                        }
+                                    },
+                                    "opponentCard": {
+                                        "name": "card2",
+                                        "logo": "NO",
+                                        "attributes": {
+                                            "test1": "13",
+                                            "test2": "13.23"
+                                        }
+                                    }
+                                 }
+                        """))
+                .andExpect(jsonPath("$.score.opponent", either(is(1)).or(is(2)).or(is(3))))
+                .andExpect(jsonPath("$.score.player", either(is(1)).or(is(2)).or(is(3))))
+                .andExpect(jsonPath("$.category", either(is("test1")).or(is("test2"))))
+                .andExpect(jsonPath("$.turnWinner", either(is("PLAYER")).or(is("OPPONENT")).or(is("DRAW"))));
+    }
+
+    @Test
+    @DirtiesContext
+    void getOpponentTurnResult_expectThrowNotOpponentTurnException() throws Exception {
+        Game testGame = gameRepo.save(new Game(winnerDeck, loserDeck));
+
+        mockMvc.perform(get("/api/game/" + testGame.getId() + "/opponentTurn"))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().reason("Der Gegner ist nicht am Zug!"));
     }
 }
