@@ -7,4 +7,8 @@ export type GameStateDTO = {
     };
     nextTurnBy?: "PLAYER" | "OPPONENT";
     nextPlayerCard?: CardDTO;
+    category?: string;
+    turnWinner?: "PLAYER" | "OPPONENT" | "DRAW";
+    playerCard?: CardDTO;
+    opponentCard?: CardDTO;
 }

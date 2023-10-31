@@ -1,7 +1,12 @@
 package com.github.ulrikewerner.backend.controller;
 
 import com.github.ulrikewerner.backend.dto.GameStateDTO;
+import com.github.ulrikewerner.backend.dto.PlayerTurnInputDTO;
+import com.github.ulrikewerner.backend.dto.TurnDTO;
 import com.github.ulrikewerner.backend.entities.Game;
+import com.github.ulrikewerner.backend.exception.CategoryNotFoundException;
+import com.github.ulrikewerner.backend.exception.GameNotFoundException;
+import com.github.ulrikewerner.backend.exception.NotYourTurnException;
 import com.github.ulrikewerner.backend.services.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +32,11 @@ public class GameController {
         return optionalGame
                 .map(game -> ResponseEntity.ok(new GameStateDTO(game)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{gameId}")
+    public ResponseEntity<TurnDTO> getTurnResult(@PathVariable String gameId, @RequestBody PlayerTurnInputDTO category)
+            throws GameNotFoundException, CategoryNotFoundException, NotYourTurnException {
+        return ResponseEntity.ok(gameService.getPlayerTurnResult(gameId, category));
     }
 }

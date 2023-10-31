@@ -1,9 +1,6 @@
 package com.github.ulrikewerner.backend.serviceTests;
 
-import com.github.ulrikewerner.backend.entities.Card;
-import com.github.ulrikewerner.backend.entities.CardAttribute;
-import com.github.ulrikewerner.backend.entities.Deck;
-import com.github.ulrikewerner.backend.entities.Game;
+import com.github.ulrikewerner.backend.entities.*;
 import com.github.ulrikewerner.backend.repositories.GameRepo;
 import com.github.ulrikewerner.backend.services.CardService;
 import com.github.ulrikewerner.backend.services.GameService;
@@ -19,14 +16,14 @@ import static org.mockito.Mockito.*;
 class GameServiceTest {
 
     GameRepo gameRepo = mock(GameRepo.class);
-    CardService cardservice = mock(CardService.class);
-    GameService gameService = new GameService(cardservice, gameRepo);
+    CardService cardService = mock(CardService.class);
+    GameService gameService = new GameService(cardService, gameRepo);
 
-    private final CardAttribute dummyCardAttribute = new CardAttribute("test", 1223, true);
-    private final Card dummyCard1 = new Card("1", "Team1", new ArrayList<>(List.of(dummyCardAttribute)));
-    private final Card dummyCard2 = new Card("2", "Team2", new ArrayList<>(List.of(dummyCardAttribute)));
-    private final Card dummyCard3 = new Card("3", "Team3", new ArrayList<>(List.of(dummyCardAttribute)));
-    private final Card dummyCard4 = new Card("4", "Team3", new ArrayList<>(List.of(dummyCardAttribute)));
+    private final CardAttribute dummyCardAttribute = new CardAttribute("test", 1223, true, true);
+    private final Card dummyCard1 = new Card("1", "Team1", NflLogoAcronym.NFL, new ArrayList<>(List.of(dummyCardAttribute)));
+    private final Card dummyCard2 = new Card("2", "Team2", NflLogoAcronym.ARI, new ArrayList<>(List.of(dummyCardAttribute)));
+    private final Card dummyCard3 = new Card("3", "Team3", NflLogoAcronym.BAL, new ArrayList<>(List.of(dummyCardAttribute)));
+    private final Card dummyCard4 = new Card("4", "Team3", NflLogoAcronym.ATL, new ArrayList<>(List.of(dummyCardAttribute)));
 
     @Test
     void startNewGame_expectOneGame() {
@@ -43,7 +40,7 @@ class GameServiceTest {
         newGame.setPlayerTurn(true);
         newGame.setFinished(false);
 
-        when(cardservice.getAllCards()).thenReturn(cardList2);
+        when(cardService.getAllCards()).thenReturn(cardList2);
         when(gameRepo.save(any(Game.class))).thenAnswer(invocation -> {
             Game savedGame = invocation.getArgument(0);
             savedGame.setId(newGame.getId());
@@ -52,7 +49,7 @@ class GameServiceTest {
 
         Game actualGame= gameService.startNewGame();
 
-        verify(cardservice).getAllCards();
+        verify(cardService).getAllCards();
         verify(gameRepo).save(any(Game.class));
         assertEquals(newGame.getId(), actualGame.getId());
         assertEquals(newGame.getPlayerCards().size(), actualGame.getPlayerCards().size());

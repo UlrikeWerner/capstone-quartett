@@ -24,6 +24,12 @@
   display: none;
 }
 
+:is(.card-player, .card-opponent) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .card-player {
   background-color: color.$player;
   transition: all 500ms ease;
@@ -39,18 +45,47 @@
   h3 {
     color: color.$font-color-25-black;
     text-align: center;
+    margin-top: -0.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-logo {
+    text-align: center;
   }
 
   .attributes-wrapper {
     display: flex;
     justify-content: space-between;
-    margin: 0 1rem 0 1rem;
+    margin: 0 0.5rem 0.125rem 0.5rem;
+    padding: 0.125rem;
+    width: 90%;
+    background-color: transparent;
+    border: none;
+    font-size: 1rem;
 
     p {
       margin: 0;
       font-weight: bold;
       color: color.$font-color-45-black;
     }
+  }
+}
+
+.attributes-border-player {
+  &:is(:hover, :focus) {
+    outline: 2px solid color.$player;
+    outline-offset: .125rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+  }
+}
+
+.attributes-border-opponent {
+  &:is(:hover, :focus) {
+    outline: 2px solid color.$opponent;
+    outline-offset: .125rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
   }
 }
 
@@ -64,4 +99,10 @@
 
 .card-isEmpty {
   background-color: transparent;
+}
+
+.card-button {
+  margin: 0;
+  padding: 0;
+  box-sizing: content-box;
 }

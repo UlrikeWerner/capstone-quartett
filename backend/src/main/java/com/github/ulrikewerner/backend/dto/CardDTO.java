@@ -2,24 +2,26 @@ package com.github.ulrikewerner.backend.dto;
 
 import com.github.ulrikewerner.backend.entities.Card;
 import com.github.ulrikewerner.backend.entities.CardAttribute;
+import com.github.ulrikewerner.backend.entities.NflLogoAcronym;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Getter
 public class CardDTO {
     private final String name;
-    private Map<String, String> attributes;
+    private final NflLogoAcronym logo;
+    private final Map<String, String> attributes = new LinkedHashMap<>();
 
     public CardDTO(Card card) {
         name = card.name();
+        logo = card.logo();
         setAttributes(card.attributes());
     }
 
     private void setAttributes(ArrayList<CardAttribute> attributeList) {
-        this.attributes = new HashMap<>();
         for(CardAttribute attribute : attributeList){
             if(attribute.isDecimal()){
                 attributes.put(attribute.name(), Double.toString(attribute.value() / 100.0));
