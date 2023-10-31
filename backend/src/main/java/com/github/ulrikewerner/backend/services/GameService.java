@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -46,16 +45,8 @@ public class GameService {
         if (currentGame.isPlayerTurn()) {
             throw new NotOpponentTurnException();
         }
-        ArrayList<CardAttribute> attributeList = currentGame
-                .getOpponentCards()
-                .getCards()
-                .get(0)
-                .attributes();
-        if (attributeList.isEmpty()) {
-            throw new CategoryNotFoundException("");
-        }
-        int randomCategoryIndex = ThreadLocalRandom.current().nextInt(0, attributeList.size());
-        return getTurnResult(currentGame, attributeList.get(randomCategoryIndex).name());
+        CardAttribute attribute = cardService.getRandomAttribute(currentGame.getOpponentCards().lookAtFirstCard().orElseThrow());
+        return getTurnResult(currentGame, attribute.name());
     }
 
     public TurnDTO getPlayerTurnResult(String gameId, String category)
