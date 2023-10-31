@@ -1,4 +1,4 @@
-import {NflLogoAcronym} from "./TennesseeTitansLogo.tsx";
+import {NflLogoAcronym} from "./TeamLogo.tsx";
 
 export type CardDTO = {
     name: string;
