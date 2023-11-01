@@ -94,8 +94,8 @@ export default function Game() {
                 setCardsInDeckPlayer(response.data.score.player);
                 setCanChooseCategory(false);
             })
-            .catch((error) => {
-                setErrorMessage("Fehler bei deinen Zug!" + error.message);
+            .catch(() => {
+                setErrorMessage("Das Spiel ist beendet.");
             })
     }
 
@@ -130,8 +130,8 @@ export default function Game() {
                 setCardsInDeckPlayer(response.data.score.player);
                 setCanChooseCategory(false);
             })
-            .catch((error) => {
-                setErrorMessage("Fehler beim gegnerischen Zug!" + error.message);
+            .catch(() => {
+                setErrorMessage("Das Spiel ist beendet.");
             })
     }
 
