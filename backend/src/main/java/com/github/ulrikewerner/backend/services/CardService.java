@@ -8,7 +8,9 @@ import com.github.ulrikewerner.backend.repositories.CardRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +48,14 @@ public class CardService {
             return opponentCardAttribute.isBiggerBetter() ? TurnWinner.OPPONENT : TurnWinner.PLAYER;
         }
         return TurnWinner.DRAW;
+    }
+
+    public CardAttribute getRandomAttribute(Card card) throws CategoryNotFoundException {
+        ArrayList<CardAttribute> attributeList = card.attributes();
+        if (attributeList.isEmpty()) {
+            throw new CategoryNotFoundException("");
+        }
+        int randomCategoryIndex = ThreadLocalRandom.current().nextInt(0, attributeList.size());
+        return attributeList.get(randomCategoryIndex);
     }
 }

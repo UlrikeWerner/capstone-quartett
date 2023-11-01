@@ -9,12 +9,14 @@ type CardDeckProps = {
     readonly score?: number;
     readonly cardContent?: CardDTO;
     readonly isClickable?: boolean;
+    readonly playCardIsClickable?: boolean;
     readonly isVisible?: boolean;
     readonly isLaidOut?: boolean;
     readonly drawCard?: () => void;
     readonly canChooseCategory?: boolean;
     readonly cardsInDeck?: number;
     readonly selectCategory?: (category: string) => void;
+    readonly seeOpponentCard?: () => void;
 }
 
 export default function Card(props: CardDeckProps) {
@@ -49,9 +51,18 @@ export default function Card(props: CardDeckProps) {
         return (
             <>
                 {props.isLaidOut &&
-                    <div className={"card card-absolute card-" + props.owner}>
-                        <NFLIcons.NFL size={200}/>
-                    </div>
+                    (props.playCardIsClickable
+                    ?
+                        <button type="button"
+                              className={"card card-absolute card-" + props.owner}
+                              onClick={props.seeOpponentCard}
+                        >
+                            <NFLIcons.NFL size={200}/>
+                        </button>
+                    :
+                        <div className={"card card-absolute card-" + props.owner}>
+                            <NFLIcons.NFL size={200}/>
+                        </div>)
                 }
                 {!props.isLaidOut &&
                     <div

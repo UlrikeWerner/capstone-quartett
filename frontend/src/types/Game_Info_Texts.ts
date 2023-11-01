@@ -5,6 +5,7 @@ export const GAME_INFO_TEXTS = {
     startChooseCategoryInfo: "Klick auf eine Kategorie auf deiner Karte, um sie zu wählen.",
     resultChosenCategoryContinue: "Klick auf deinen Kartenstarpel, um die nächste Runde zu beginnen",
     startOpponentTurn: "Dein Gegner ist am Zug!",
+    seeOpponentCard: "Klick auf die gegnerischen Karte!",
     gameOver: "Das Spiel ist vorbei!"
 }
 

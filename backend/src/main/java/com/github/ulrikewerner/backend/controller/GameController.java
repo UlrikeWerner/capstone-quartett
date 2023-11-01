@@ -6,6 +6,7 @@ import com.github.ulrikewerner.backend.dto.TurnDTO;
 import com.github.ulrikewerner.backend.entities.Game;
 import com.github.ulrikewerner.backend.exception.CategoryNotFoundException;
 import com.github.ulrikewerner.backend.exception.GameNotFoundException;
+import com.github.ulrikewerner.backend.exception.NotOpponentTurnException;
 import com.github.ulrikewerner.backend.exception.NotYourTurnException;
 import com.github.ulrikewerner.backend.services.GameService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,12 @@ public class GameController {
     @PutMapping("/{gameId}")
     public ResponseEntity<TurnDTO> getTurnResult(@PathVariable String gameId, @RequestBody PlayerTurnInputDTO category)
             throws GameNotFoundException, CategoryNotFoundException, NotYourTurnException {
-        return ResponseEntity.ok(gameService.getPlayerTurnResult(gameId, category));
+        return ResponseEntity.ok(gameService.getPlayerTurnResult(gameId, category.toString()));
+    }
+
+    @GetMapping("/{gameId}/opponentTurn")
+    public ResponseEntity<TurnDTO> getOpponentTurnResult(@PathVariable String gameId)
+            throws GameNotFoundException, CategoryNotFoundException, NotOpponentTurnException {
+        return ResponseEntity.ok(gameService.getOpponentTurnResult(gameId));
     }
 }

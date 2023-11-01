@@ -1,13 +1,10 @@
 package com.github.ulrikewerner.backend.services;
 
-import com.github.ulrikewerner.backend.dto.PlayerTurnInputDTO;
 import com.github.ulrikewerner.backend.dto.TurnDTO;
-import com.github.ulrikewerner.backend.entities.Card;
-import com.github.ulrikewerner.backend.entities.Deck;
-import com.github.ulrikewerner.backend.entities.Game;
-import com.github.ulrikewerner.backend.entities.TurnWinner;
+import com.github.ulrikewerner.backend.entities.*;
 import com.github.ulrikewerner.backend.exception.CategoryNotFoundException;
 import com.github.ulrikewerner.backend.exception.GameNotFoundException;
+import com.github.ulrikewerner.backend.exception.NotOpponentTurnException;
 import com.github.ulrikewerner.backend.exception.NotYourTurnException;
 import com.github.ulrikewerner.backend.repositories.GameRepo;
 import lombok.RequiredArgsConstructor;
@@ -43,32 +40,45 @@ public class GameService {
         return gameRepo.findById(id);
     }
 
-    public TurnDTO getPlayerTurnResult(String gameId, PlayerTurnInputDTO category)
+    public TurnDTO getOpponentTurnResult(String gameId) throws CategoryNotFoundException, GameNotFoundException, NotOpponentTurnException {
+        Game currentGame = getGameById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+        if (currentGame.isPlayerTurn()) {
+            throw new NotOpponentTurnException();
+        }
+        CardAttribute attribute = cardService.getRandomAttribute(currentGame.getOpponentCards().lookAtFirstCard().orElseThrow());
+        return getTurnResult(currentGame, attribute.name());
+    }
+
+    public TurnDTO getPlayerTurnResult(String gameId, String category)
             throws GameNotFoundException, CategoryNotFoundException, NotYourTurnException {
 
-        Game currentGame = getGameById(gameId).orElseThrow(()-> new GameNotFoundException(gameId));
-        if(!currentGame.isPlayerTurn()){
+        Game currentGame = getGameById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+        if (!currentGame.isPlayerTurn()) {
             throw new NotYourTurnException();
         }
-        Card playerCard = currentGame.getPlayerCards().drawFirstCard().orElseThrow();
-        Card opponentCard = currentGame.getOpponentCards().drawFirstCard().orElseThrow();
-        TurnWinner winner = cardService.compare(playerCard, opponentCard, category.toString());
+        return getTurnResult(currentGame, category);
+    }
+
+    private TurnDTO getTurnResult(Game game, String category) throws CategoryNotFoundException {
+        Card playerCard = game.getPlayerCards().drawFirstCard().orElseThrow();
+        Card opponentCard = game.getOpponentCards().drawFirstCard().orElseThrow();
+        TurnWinner winner = cardService.compare(playerCard, opponentCard, category);
         switch (winner) {
             case DRAW -> {
-                currentGame.getPlayerCards().addCardToBottom(playerCard);
-                currentGame.getOpponentCards().addCardToBottom(opponentCard);
+                game.getPlayerCards().addCardToBottom(playerCard);
+                game.getOpponentCards().addCardToBottom(opponentCard);
             }
             case PLAYER -> {
-                currentGame.getPlayerCards().addCardToBottom(playerCard);
-                currentGame.getPlayerCards().addCardToBottom(opponentCard);
+                game.getPlayerCards().addCardToBottom(playerCard);
+                game.getPlayerCards().addCardToBottom(opponentCard);
             }
             case OPPONENT -> {
-                currentGame.getOpponentCards().addCardToBottom(opponentCard);
-                currentGame.getOpponentCards().addCardToBottom(playerCard);
+                game.getOpponentCards().addCardToBottom(opponentCard);
+                game.getOpponentCards().addCardToBottom(playerCard);
             }
         }
-        currentGame.setPlayerTurn(false);
-        Game savedGame = gameRepo.save(currentGame);
-        return new TurnDTO(savedGame, category.toString(), winner, playerCard, opponentCard);
+        game.setPlayerTurn(!game.isPlayerTurn());
+        Game savedGame = gameRepo.save(game);
+        return new TurnDTO(savedGame, category, winner, playerCard, opponentCard);
     }
 }

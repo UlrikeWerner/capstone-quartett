@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -149,5 +150,41 @@ class CardServiceTest {
 
         assertEquals(TurnWinner.DRAW, actual);
         assertEquals(TurnWinner.DRAW, actual2);
+    }
+
+    @Test
+    void getRandomAttribute_shouldReturnACardAttribute() throws CategoryNotFoundException {
+        CardAttribute testAttribute = new CardAttribute("test", 2642, true, true);
+        CardAttribute testAttribute2 = new CardAttribute("secondTest", 42, false, true);
+        ArrayList<CardAttribute> testAttributes = new ArrayList<>(List.of(testAttribute, testAttribute2));
+        Card testCard = new Card("1", "Flensburger Seemöwen", NflLogoAcronym.NFL, testAttributes);
+
+        CardAttribute randomAttribute = cardService.getRandomAttribute(testCard);
+
+        assertTrue(Objects.equals(randomAttribute.name(), "test") || Objects.equals(randomAttribute.name(), "secondTest"));
+    }
+
+    @Test
+    void getRandomAttribute_shouldReturnDifferentCardAttribute() throws CategoryNotFoundException {
+        CardAttribute testAttribute = new CardAttribute("test", 2642, true, true);
+        CardAttribute testAttribute2 = new CardAttribute("test2", 2642, true, true);
+        CardAttribute testAttribute3 = new CardAttribute("test3", 2642, true, true);
+        CardAttribute testAttribute4 = new CardAttribute("test4", 2642, true, true);
+        CardAttribute testAttribute5 = new CardAttribute("test5", 2642, true, true);
+        ArrayList<CardAttribute> testAttributes = new ArrayList<>(List.of(testAttribute, testAttribute2, testAttribute3, testAttribute4, testAttribute5));
+        Card testCard = new Card("1", "Flensburger Seemöwen", NflLogoAcronym.NFL, testAttributes);
+
+        CardAttribute randomAttribute = cardService.getRandomAttribute(testCard);
+        CardAttribute randomAttribute2 = cardService.getRandomAttribute(testCard);
+
+        assertNotEquals(randomAttribute, randomAttribute2);
+    }
+
+    @Test
+    void getRandomAttribute_shouldThrowCategoryNotFoundException() {
+        ArrayList<CardAttribute> testAttributes = new ArrayList<>(List.of());
+        Card testCard = new Card("1", "Flensburger Seemöwen", NflLogoAcronym.NFL, testAttributes);
+
+        assertThrowsExactly(CategoryNotFoundException.class, () -> cardService.getRandomAttribute(testCard));
     }
 }
