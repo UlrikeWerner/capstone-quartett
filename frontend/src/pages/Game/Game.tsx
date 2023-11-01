@@ -12,8 +12,8 @@ import {TurnResultInputDTO} from "../../types/TurnResultInputDTO.ts";
 export default function Game() {
     const {id} = useParams();
     const [errorMessage, setErrorMessage] = useState<string>();
-    const [gameState, setGameState]= useState<GameStateDTO>();
-    const [runningGameState, setRunningGameState]= useState<GameStateDTO>();
+    const [gameState, setGameState] = useState<GameStateDTO>();
+    const [runningGameState, setRunningGameState] = useState<GameStateDTO>();
     const [infoText, setInfoText] = useState<string>("");
     const [instructionText, setInstructionText] = useState<string>("");
     const [playerDeckIsClickable, setPlayerDeckIsClickable] = useState<boolean>(false);
@@ -36,25 +36,29 @@ export default function Game() {
         setOpponentCardIsVisible(false);
         setPlayerCardIsLaidOut(false);
         setOpponentCardIsLaidOut(false);
-        if(gameState?.score.player){
+        if (gameState?.score.player) {
             setCardsInDeckPlayer(gameState?.score.player);
         }
-        if(gameState?.score.opponent){
+        if (gameState?.score.opponent) {
             setCardsInDeckOpponent(gameState?.score.opponent);
         }
-        if(gameState?.nextTurnBy === "PLAYER"){
+        if (gameState?.nextTurnBy === "PLAYER") {
             setCanChooseCategory(true);
         } else {
             setCanChooseCategory(false);
         }
 
-    },[gameState]);
+    }, [gameState]);
 
     function getGame() {
         axios.get("/api/game/" + id)
             .then(response => {
-                if(!response.data.playerCard){
-                    setRunningGameState({...response.data, playerCard: response.data.nextPlayerCard});
+                if (!response.data.playerCard) {
+                    setRunningGameState({
+                        ...response.data,
+                        playerCard: response.data.nextPlayerCard,
+                        actualTurn: response.data.nextTurnBy === "PLAYER" ? "OPPONENT" : "PLAYER"
+                    });
                 }
                 setGameState(response.data);
             })
@@ -66,17 +70,17 @@ export default function Game() {
             })
     }
 
-    function getTurnResult(chosenCategory: TurnResultInputDTO){
+    function getTurnResult(chosenCategory: TurnResultInputDTO) {
         axios.put("/api/game/" + id, chosenCategory)
             .then(response => {
-                setRunningGameState(response.data);
+                setRunningGameState({...response.data, actualTurn: "PLAYER"});
                 return response;
             })
             .then(response => {
                 let winner: string;
-                if(response.data.turnWinner === "PLAYER"){
+                if (response.data.turnWinner === "PLAYER") {
                     winner = "Du hast";
-                } else if(response.data.turnWinner === "OPPONENT"){
+                } else if (response.data.turnWinner === "OPPONENT") {
                     winner = "Der Gegner hat";
                 } else {
                     winner = "Keiner hat";
@@ -89,97 +93,132 @@ export default function Game() {
                 setCardsInDeckPlayer(response.data.score.player);
                 setCanChooseCategory(false);
             })
-            .catch(() => {
-                setErrorMessage("Opps");
+            .catch((error) => {
+                setErrorMessage("Fehler bei deinen Zug!" + error.message);
+            })
+    }
+
+    function getOpponentTurnResult() {
+        axios.get("/api/game/" + id + "/opponentTurn")
+            .then((response) => {
+                if (gameState && runningGameState?.score) {
+                    setRunningGameState(
+                        {
+                            ...runningGameState,
+                            category: response.data.category,
+                            nextPlayerCard: response.data.nextPlayerCard,
+                            nextOpponentCard: response.data.opponentCard,
+                            actualTurn: "OPPONENT",
+                            nextTurnBy: response.data.nextTurnBy,
+                            playerCard: response.data.playerCard,
+                            opponentCard: undefined,
+                            nextScore: response.data.score,
+                            turnWinner: response.data.turnWinner
+                        }
+                    );
+                }
+                return response;
+            })
+            .then(response => {
+                setInfoText(`Der Gegner ist am Zug! \n Die Kategorie: ${response.data.category} wurde gewählt.`);
+                setInstructionText(GAME_INFO_TEXTS.seeOpponentCard);
+                setOpponentCardIsLaidOut(true);
+                setCardsInDeckOpponent(response.data.score.opponent);
+                setPlayerDeckIsClickable(false);
+                setCardsInDeckPlayer(response.data.score.player);
+                setCanChooseCategory(false);
+            })
+            .catch((error) => {
+                setErrorMessage("Fehler beim gegnerischen Zug!" + error.message);
             })
     }
 
     function drawCard() {
-        if(runningGameState?.nextTurnBy === "PLAYER"){
+        if (runningGameState?.actualTurn === "OPPONENT" && runningGameState?.nextTurnBy === "PLAYER") {
+            console.log("opponent & player");
             setInfoText(GAME_INFO_TEXTS.chooseCategory);
             setInstructionText(GAME_INFO_TEXTS.startChooseCategoryInfo);
             setOpponentCardIsLaidOut(true);
-        }else {
-            if(runningGameState){
-                setRunningGameState({...runningGameState, playerCard: runningGameState.nextPlayerCard});
-            }
-            setInfoText("");
-            setInstructionText("");
-            setOpponentCardIsLaidOut(true);
+            setPlayerDeckIsClickable(false);
+            setPlayerCardIsVisible(true);
+            setOpponentCardIsVisible(true);
+            setPlayerDeckIsClickable(false);
+        } else if (runningGameState?.actualTurn === "PLAYER" && runningGameState?.nextTurnBy === "OPPONENT") {
+            console.log("player & opponent");
+            getOpponentTurnResult();
+        } else {
+            console.log("Game Over");
         }
-        setPlayerDeckIsClickable(false);
-        setPlayerCardIsVisible(true);
-        setOpponentCardIsVisible(true);
-        setPlayerDeckIsClickable(false);
     }
 
-    function chooseCategory(category: string){
+    function chooseCategory(category: string) {
         const selectedCategory: TurnResultInputDTO = {"category": category};
         getTurnResult(selectedCategory);
     }
 
-    return(
+    return (
         <>
             {
                 errorMessage
                     ? <p>{errorMessage}</p>
                     : runningGameState &&
-                        <section className="gameBoard">
-                            <ScoreBoard playerScore={runningGameState.score.player} opponentScore={runningGameState.score.opponent}/>
-                            <section className="infoField">
-                                <Info infoText={infoText} instructionText={instructionText} />
-                            </section>
-
-                            <section className="deck player-deck">
-                                <Card type="deck"
-                                      owner="player"
-                                      score={runningGameState.score.player}
-                                      cardsInDeck={cardsInDeckPlayer -1}
-                                />
-                                <Card type="movingCard"
-                                      owner="player"
-                                      score={runningGameState.score.player}
-                                      cardsInDeck={cardsInDeckPlayer}
-                                      isClickable={playerDeckIsClickable}
-                                      drawCard={drawCard}/>
-                            </section>
-
-                            <section className="deck player-card">
-                                <Card type="deck"
-                                      owner="player"
-                                />
-                                <Card type="playCard"
-                                      owner="player"
-                                      isVisible={playerCardIsVisible}
-                                      isLaidOut={playerCardIsLaidOut}
-                                      cardContent={runningGameState.playerCard}
-                                      canChooseCategory={canChooseCategory}
-                                      selectCategory={chooseCategory}
-                                />
-                            </section>
-
-                            <section className="deck opponent-card">
-                                <Card type="deck"
-                                      owner="opponent"
-                                />
-                                <Card type="playCard"
-                                      owner="opponent"
-                                      isVisible={opponentCardIsVisible}
-                                      isLaidOut={opponentCardIsLaidOut}
-                                      cardContent={runningGameState.opponentCard}
-                                      canChooseCategory={canChooseCategory}
-                                />
-                                <p className="vs">VS</p>
-                            </section>
-
-                            <section className="deck opponent-deck">
-                                <Card type="deck"
-                                      owner="opponent"
-                                      score={runningGameState.score.opponent}
-                                      cardsInDeck={cardsInDeckOpponent}
-                                />
-                            </section>
+                    <section className="gameBoard">
+                        <ScoreBoard playerScore={runningGameState.score.player}
+                                    opponentScore={runningGameState.score.opponent}/>
+                        <section className="infoField">
+                            <Info infoText={infoText} instructionText={instructionText}/>
                         </section>
+
+                        <section className="deck player-deck">
+                            <Card type="deck"
+                                  owner="player"
+                                  score={runningGameState.score.player}
+                                  cardsInDeck={cardsInDeckPlayer - 1}
+                            />
+                            <Card type="movingCard"
+                                  owner="player"
+                                  score={runningGameState.score.player}
+                                  cardsInDeck={cardsInDeckPlayer}
+                                  isClickable={playerDeckIsClickable}
+                                  drawCard={drawCard}/>
+                        </section>
+
+                        <section className="deck player-card">
+                            <Card type="deck"
+                                  owner="player"
+                            />
+                            <Card type="playCard"
+                                  owner="player"
+                                  isVisible={playerCardIsVisible}
+                                  isLaidOut={playerCardIsLaidOut}
+                                  cardContent={runningGameState.playerCard}
+                                  canChooseCategory={canChooseCategory}
+                                  selectCategory={chooseCategory}
+                            />
+                        </section>
+
+                        <section className="deck opponent-card">
+                            <Card type="deck"
+                                  owner="opponent"
+                            />
+                            <Card type="playCard"
+                                  owner="opponent"
+                                  isVisible={opponentCardIsVisible}
+                                  isLaidOut={opponentCardIsLaidOut}
+                                  cardContent={runningGameState.opponentCard}
+                                  canChooseCategory={canChooseCategory}
+                            />
+                            <p className="vs">VS</p>
+                        </section>
+
+                        <section className="deck opponent-deck">
+                            <Card type="deck"
+                                  owner="opponent"
+                                  score={runningGameState.score.opponent}
+                                  cardsInDeck={cardsInDeckOpponent}
+                            />
+                        </section>
+                    </section>
             }
         </>
     )

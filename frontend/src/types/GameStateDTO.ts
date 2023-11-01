@@ -5,8 +5,14 @@ export type GameStateDTO = {
         opponent: number;
         player: number;
     };
+    nextScore?: {
+        opponent: number;
+        player: number;
+    }
+    actualTurn?: "PLAYER" | "OPPONENT"
     nextTurnBy?: "PLAYER" | "OPPONENT";
     nextPlayerCard?: CardDTO;
+    nextOpponentCard?: CardDTO;
     category?: string;
     turnWinner?: "PLAYER" | "OPPONENT" | "DRAW";
     playerCard?: CardDTO;
