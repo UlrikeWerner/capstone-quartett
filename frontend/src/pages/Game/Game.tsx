@@ -24,6 +24,7 @@ export default function Game() {
     const [canChooseCategory, setCanChooseCategory] = useState<boolean>(false);
     const [cardsInDeckPlayer, setCardsInDeckPlayer] = useState<number>(0);
     const [cardsInDeckOpponent, setCardsInDeckOpponent] = useState<number>();
+    const [opponentCardIsClickable, setOpponentCardIsClickable] = useState<boolean>(false);
 
     useEffect(() => {
         getGame();
@@ -125,6 +126,7 @@ export default function Game() {
                 setOpponentCardIsLaidOut(true);
                 setCardsInDeckOpponent(response.data.score.opponent);
                 setPlayerDeckIsClickable(false);
+                setOpponentCardIsClickable(true);
                 setCardsInDeckPlayer(response.data.score.player);
                 setCanChooseCategory(false);
             })
@@ -135,20 +137,52 @@ export default function Game() {
 
     function drawCard() {
         if (runningGameState?.actualTurn === "OPPONENT" && runningGameState?.nextTurnBy === "PLAYER") {
-            console.log("opponent & player");
+            setCanChooseCategory(true);
             setInfoText(GAME_INFO_TEXTS.chooseCategory);
             setInstructionText(GAME_INFO_TEXTS.startChooseCategoryInfo);
             setOpponentCardIsLaidOut(true);
-            setPlayerDeckIsClickable(false);
-            setPlayerCardIsVisible(true);
             setOpponentCardIsVisible(true);
             setPlayerDeckIsClickable(false);
+            setPlayerCardIsVisible(true);
+            setPlayerDeckIsClickable(false);
         } else if (runningGameState?.actualTurn === "PLAYER" && runningGameState?.nextTurnBy === "OPPONENT") {
-            console.log("player & opponent");
             getOpponentTurnResult();
         } else {
-            console.log("Game Over");
+            setErrorMessage("Unerwarteter Zustand des Spiels!")
         }
+    }
+
+    function showOpponentCard() {
+        setOpponentCardIsClickable(false);
+        setOpponentCardIsLaidOut(false);
+        setOpponentCardIsVisible(true);
+        if (runningGameState?.nextScore) {
+            setRunningGameState(
+                {
+                    ...runningGameState,
+                    score: runningGameState?.nextScore,
+                    nextScore: undefined,
+                    opponentCard: runningGameState.nextOpponentCard,
+                    nextOpponentCard: undefined,
+                    actualTurn: "OPPONENT",
+                    nextTurnBy: "PLAYER"
+                })
+        }
+        let winner: string = "";
+        switch (runningGameState?.turnWinner) {
+            case "PLAYER":
+                winner = "Du hast";
+                break;
+            case "OPPONENT":
+                winner = "Der Gegner hat";
+                break;
+            case "DRAW":
+                winner = "Keiner hat";
+                break;
+        }
+        setInfoText(`${winner} diese Runde gewonnen.`);
+        setInstructionText(GAME_INFO_TEXTS.resultChosenCategoryContinue);
+        setPlayerDeckIsClickable(true);
     }
 
     function chooseCategory(category: string) {
@@ -205,6 +239,8 @@ export default function Game() {
                                   owner="opponent"
                                   isVisible={opponentCardIsVisible}
                                   isLaidOut={opponentCardIsLaidOut}
+                                  playCardIsClickable={opponentCardIsClickable}
+                                  seeOpponentCard={showOpponentCard}
                                   cardContent={runningGameState.opponentCard}
                                   canChooseCategory={canChooseCategory}
                             />
