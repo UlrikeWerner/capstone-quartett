@@ -95,7 +95,7 @@ export default function Game() {
                 setCanChooseCategory(false);
             })
             .catch(() => {
-                setErrorMessage("Das Spiel ist beendet.");
+                setErrorMessage(GAME_INFO_TEXTS.gameOver);
             })
     }
 
@@ -131,7 +131,7 @@ export default function Game() {
                 setCanChooseCategory(false);
             })
             .catch(() => {
-                setErrorMessage("Das Spiel ist beendet.");
+                setErrorMessage(GAME_INFO_TEXTS.gameOver);
             })
     }
 

@@ -9,7 +9,7 @@ export type GameStateDTO = {
         opponent: number;
         player: number;
     }
-    actualTurn?: "PLAYER" | "OPPONENT"
+    actualTurn?: "PLAYER" | "OPPONENT";
     nextTurnBy?: "PLAYER" | "OPPONENT";
     nextPlayerCard?: CardDTO;
     nextOpponentCard?: CardDTO;
