@@ -3,10 +3,7 @@ package com.github.ulrikewerner.backend.services;
 import com.github.ulrikewerner.backend.dto.FinalGameResultDTO;
 import com.github.ulrikewerner.backend.dto.TurnDTO;
 import com.github.ulrikewerner.backend.entities.*;
-import com.github.ulrikewerner.backend.exception.CategoryNotFoundException;
-import com.github.ulrikewerner.backend.exception.GameNotFoundException;
-import com.github.ulrikewerner.backend.exception.NotOpponentTurnException;
-import com.github.ulrikewerner.backend.exception.NotYourTurnException;
+import com.github.ulrikewerner.backend.exception.*;
 import com.github.ulrikewerner.backend.interfaces.GameTurn;
 import com.github.ulrikewerner.backend.repositories.GameRepo;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +39,11 @@ public class GameService {
         return gameRepo.findById(id);
     }
 
-    public GameTurn getOpponentTurnResult(String gameId) throws CategoryNotFoundException, GameNotFoundException, NotOpponentTurnException {
+    public GameTurn getOpponentTurnResult(String gameId) throws CategoryNotFoundException, GameNotFoundException, NotOpponentTurnException, GameIsOverException {
         Game currentGame = getGameById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+        if(currentGame.isFinished()){
+            throw new GameIsOverException();
+        }
         if (currentGame.isPlayerTurn()) {
             throw new NotOpponentTurnException();
         }
@@ -52,9 +52,12 @@ public class GameService {
     }
 
     public GameTurn getPlayerTurnResult(String gameId, String category)
-            throws GameNotFoundException, CategoryNotFoundException, NotYourTurnException {
+            throws GameNotFoundException, CategoryNotFoundException, NotYourTurnException, GameIsOverException {
 
         Game currentGame = getGameById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+        if(currentGame.isFinished()){
+            throw new GameIsOverException();
+        }
         if (!currentGame.isPlayerTurn()) {
             throw new NotYourTurnException();
         }
