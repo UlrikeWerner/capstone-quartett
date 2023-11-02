@@ -25,10 +25,11 @@ export default function Game() {
     const [cardsInDeckPlayer, setCardsInDeckPlayer] = useState<number>(0);
     const [cardsInDeckOpponent, setCardsInDeckOpponent] = useState<number>();
     const [opponentCardIsClickable, setOpponentCardIsClickable] = useState<boolean>(false);
+    const [gameContinueButtonIsVisible, setGameContinueButtonIsVisible] = useState<boolean>(false);
 
     useEffect(() => {
         getGame();
-    }, []);
+    }, [id]);
 
     useEffect(() => {
         setInfoText(getStartText(gameState?.nextTurnBy));
@@ -37,18 +38,15 @@ export default function Game() {
         setOpponentCardIsVisible(false);
         setPlayerCardIsLaidOut(false);
         setOpponentCardIsLaidOut(false);
-        if (gameState?.score.player) {
-            setCardsInDeckPlayer(gameState?.score.player);
-        }
-        if (gameState?.score.opponent) {
-            setCardsInDeckOpponent(gameState?.score.opponent);
+        if (gameState?.score) {
+            setCardsInDeckPlayer(gameState.score.player);
+            setCardsInDeckOpponent(gameState.score.opponent);
         }
         if (gameState?.nextTurnBy === "PLAYER") {
             setCanChooseCategory(true);
         } else {
             setCanChooseCategory(false);
         }
-
     }, [gameState]);
 
     function getGame() {
@@ -62,9 +60,24 @@ export default function Game() {
                     });
                 }
                 setGameState(response.data);
+                return response;
             })
-            .then(() => {
-                setInstructionText(GAME_INFO_TEXTS.startTurnInfo);
+            .then((response) => {
+                if(response.data.finished){
+                    let winner: string;
+                    if(response.data.score.opponent === 0){
+                        winner = "Du hast";
+                    } else {
+                        winner = "Der Gegner hat";
+                    }
+                    setInstructionText(GAME_INFO_TEXTS.gameOver + `\n ${winner} dieses Spiel gewonnen.`);
+                    setPlayerDeckIsClickable(false);
+                    setCanChooseCategory(false);
+                } else {
+                    setInstructionText(GAME_INFO_TEXTS.startTurnInfo);
+                }
+                setOpponentCardIsLaidOut(false);
+                setOpponentCardIsVisible(false);
             })
             .catch(() => {
                 setErrorMessage("Das Spiel konnte nicht geladen werden!");
@@ -87,10 +100,10 @@ export default function Game() {
                     winner = "Keiner hat";
                 }
                 setInfoText(`Die Kategorie: ${chosenCategory.category} wurde gewählt. \n ${winner} diese Runde gewonnen.`);
-                setInstructionText(GAME_INFO_TEXTS.resultChosenCategoryContinue);
+                setInstructionText("");
+                setGameContinueButtonIsVisible(true);
                 setOpponentCardIsLaidOut(false);
                 setCardsInDeckOpponent(response.data.score.opponent);
-                setPlayerDeckIsClickable(true);
                 setCardsInDeckPlayer(response.data.score.player);
                 setCanChooseCategory(false);
             })
@@ -115,6 +128,15 @@ export default function Game() {
                             opponentCard: undefined,
                             nextScore: response.data.score,
                             turnWinner: response.data.turnWinner
+                        }
+                    );
+                }
+                if(runningGameState && response.data.finished){
+                    setRunningGameState(
+                        {
+                            ...runningGameState,
+                            "finished": response.data.finished,
+                            "winner": response.data.winner
                         }
                     );
                 }
@@ -190,6 +212,10 @@ export default function Game() {
         getTurnResult(selectedCategory);
     }
 
+    function clearPlayingCards() {
+        console.log("klick");
+    }
+
     return (
         <>
             {
@@ -200,7 +226,7 @@ export default function Game() {
                         <ScoreBoard playerScore={runningGameState.score.player}
                                     opponentScore={runningGameState.score.opponent}/>
                         <section className="infoField">
-                            <Info infoText={infoText} instructionText={instructionText}/>
+                            <Info infoText={infoText} instructionText={instructionText} showButton={gameContinueButtonIsVisible} continueButtonClick={clearPlayingCards}/>
                         </section>
 
                         <section className="deck player-deck">

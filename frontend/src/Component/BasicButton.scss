@@ -1,0 +1,22 @@
+@use 'src/styles/color';
+
+.basic-button {
+  height: 100%;
+  width: 100%;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  background: transparent;
+  color: color.$button-font-color;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.2s ease-in-out;
+
+
+  &:is(:hover, :focus) {
+    background-color: color.$button-action-background;
+    color: color.$button-action-font-color;
+  }
+}

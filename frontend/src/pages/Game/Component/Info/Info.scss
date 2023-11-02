@@ -1,10 +1,10 @@
 @use "src/styles/color";
 
 .gameInfo {
-  background-color: color.$info-backgroud;
+  background-color: color.$info-background;
   margin: 1rem 5rem 1rem 5rem;
   min-height: 8rem;
-  border: 2px solid color.$info-backgroud;
+  border: 2px solid color.$info-background;
   border-radius: 1rem;
 
   h2 {
@@ -22,5 +22,12 @@
     text-align: center;
     padding: 0.5rem 0.75rem 0.75rem 0.75rem;
     margin: 0;
+  }
+
+  .button-size {
+    margin: 0 0 0.5rem 0.75rem;
+    height: 1.5rem;
+    width: 5rem;
+    border: solid color.$button-border-color 2px;
   }
 }

@@ -1,8 +1,11 @@
 import "./Info.scss";
+import BasicButton from "../../../../Component/BasicButton.tsx";
 
 type InfoProps = {
     readonly infoText: string;
     readonly instructionText: string;
+    readonly showButton: boolean;
+    readonly continueButtonClick: () => void;
 }
 export default function Info(props: InfoProps) {
 
@@ -10,6 +13,11 @@ export default function Info(props: InfoProps) {
         <div className="gameInfo">
             <h2>{props.infoText}</h2>
             <p>{props.instructionText}</p>
+            {props.showButton &&
+                <div className="button-size">
+                    <BasicButton text="weiter" buttonClick={props.continueButtonClick}/>
+                </div>
+            }
         </div>
     );
 }
