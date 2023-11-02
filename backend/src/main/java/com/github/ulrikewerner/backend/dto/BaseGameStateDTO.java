@@ -1,7 +1,7 @@
 package com.github.ulrikewerner.backend.dto;
 
 import com.github.ulrikewerner.backend.entities.Game;
-import com.github.ulrikewerner.backend.entities.GameTurn;
+import com.github.ulrikewerner.backend.interfaces.GameTurn;
 import lombok.Getter;
 
 import java.util.HashMap;

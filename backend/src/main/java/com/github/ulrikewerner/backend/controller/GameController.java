@@ -3,7 +3,7 @@ package com.github.ulrikewerner.backend.controller;
 import com.github.ulrikewerner.backend.dto.GameStateDTO;
 import com.github.ulrikewerner.backend.dto.PlayerTurnInputDTO;
 import com.github.ulrikewerner.backend.entities.Game;
-import com.github.ulrikewerner.backend.entities.GameTurn;
+import com.github.ulrikewerner.backend.interfaces.GameTurn;
 import com.github.ulrikewerner.backend.exception.CategoryNotFoundException;
 import com.github.ulrikewerner.backend.exception.GameNotFoundException;
 import com.github.ulrikewerner.backend.exception.NotOpponentTurnException;
