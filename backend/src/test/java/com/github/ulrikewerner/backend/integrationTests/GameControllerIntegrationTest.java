@@ -41,6 +41,7 @@ class GameControllerIntegrationTest {
     private final CardAttribute wrongCardAttribute = new CardAttribute("Punkte", 2665, true, true);
     private final Card wrongCard = new Card("1", "Detroit Lions", NflLogoAcronym.DET, new ArrayList<>(List.of(wrongCardAttribute)));
     private final Deck winnerDeck = new Deck(List.of(detroit, kansas));
+    private final Deck winnerDeckSmall = new Deck(List.of(detroit));
     private final Deck loserDeck = new Deck(List.of(philadelphia));
     private final Deck wrongCategoryDeck = new Deck(List.of(wrongCard));
 
@@ -191,6 +192,24 @@ class GameControllerIntegrationTest {
 
     @Test
     @DirtiesContext
+    void getTurnResult_expectThrowGameIsOverException() throws Exception {
+        Game newGame = new Game(winnerDeck, loserDeck);
+        newGame.setFinished(true);
+        Game testGame = gameRepo.save(newGame);
+
+        mockMvc.perform(put("/api/game/" + testGame.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                                {
+                                    "category": "Touchdowns"
+                                }
+                                """))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().reason("Das Spiel ist vorbei!"));
+    }
+
+    @Test
+    @DirtiesContext
     void getTurnResult_expectTurnDTO_withPlayerAsTurnWinner() throws Exception {
         Game testGame = gameRepo.save(new Game(loserDeck, winnerDeck));
 
@@ -332,6 +351,49 @@ class GameControllerIntegrationTest {
 
     @Test
     @DirtiesContext
+    void getTurnResult_expectFinalGameResultDTO_withOpponentAsWinner() throws Exception {
+        Game testGame = gameRepo.save(new Game(winnerDeckSmall, loserDeck));
+
+        mockMvc.perform(put("/api/game/" + testGame.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "category": "Punkte pro Spiel"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                                 {
+                                    "score": {
+                                        "opponent": 2,
+                                        "player": 0
+                                    },
+                                    "category": "Punkte pro Spiel",
+                                    "turnWinner": "OPPONENT",
+                                    "playerCard": {
+                                        "name": "Detroit Lions",
+                                        "logo": "DET",
+                                        "attributes": {
+                                            "Punkte pro Spiel": "26.65"
+                                        }
+                                    },
+                                    "opponentCard": {
+                                        "name": "Philadelphia Eagles",
+                                        "logo": "PHI",
+                                        "attributes": {
+                                            "Punkte pro Spiel": "28.06"
+                                        }
+                                    },
+                                    "winner": "OPPONENT",
+                                    "finished": true
+                                 }
+                        """))
+                .andExpect(jsonPath("$.nextTurnBy").doesNotExist())
+                .andExpect(jsonPath("$.nextPlayerCard").doesNotExist());
+    }
+
+    @Test
+    @DirtiesContext
     void getOpponentTurnResult_expectTurnDTO() throws Exception {
         CardAttribute attribute1Card1 = new CardAttribute("test1", 23, false, true);
         CardAttribute attribute1Card2 = new CardAttribute("test1", 13, false, true);
@@ -382,11 +444,70 @@ class GameControllerIntegrationTest {
 
     @Test
     @DirtiesContext
+    void getOpponentTurnResult_ReturnFinalGameResultDTO() throws Exception {
+        CardAttribute attribute1Card1 = new CardAttribute("test1", 23, false, true);
+        CardAttribute attribute1Card2 = new CardAttribute("test1", 13, false, true);
+        CardAttribute attribute2Card1 = new CardAttribute("test2", 2323, true, true);
+        CardAttribute attribute2Card2 = new CardAttribute("test2", 1323, true, true);
+        Card card1 = new Card("1", "card1", NflLogoAcronym.DET, new ArrayList<>(List.of(attribute1Card1, attribute2Card1)));
+        Card card2 = new Card("2", "card2", NflLogoAcronym.NO, new ArrayList<>(List.of(attribute1Card2, attribute2Card2)));
+        Game newGame = new Game(new Deck(List.of(card1)), new Deck(List.of(card2)));
+        newGame.setPlayerTurn(false);
+        Game testGame = gameRepo.save(newGame);
+
+        mockMvc.perform(get("/api/game/" + testGame.getId() + "/opponentTurn"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                                 {
+                                    "score": {
+                                    "opponent": 0,
+                                    "player": 2
+                                    },
+                                    "playerCard": {
+                                        "name": "card1",
+                                        "logo": "DET",
+                                        "attributes": {
+                                            "test1": "23",
+                                            "test2": "23.23"
+                                        }
+                                    },
+                                    "opponentCard": {
+                                        "name": "card2",
+                                        "logo": "NO",
+                                        "attributes": {
+                                            "test1": "13",
+                                            "test2": "13.23"
+                                        }
+                                    },
+                                    "turnWinner": "PLAYER",
+                                    "winner": "PLAYER",
+                                    "finished": true
+                                 }
+                        """))
+                .andExpect(jsonPath("$.category", either(is("test1")).or(is("test2"))))
+                .andExpect(jsonPath("$.nextTurnBy").doesNotExist())
+                .andExpect(jsonPath("$.nextPlayerCard").doesNotExist());
+    }
+
+    @Test
+    @DirtiesContext
     void getOpponentTurnResult_expectThrowNotOpponentTurnException() throws Exception {
         Game testGame = gameRepo.save(new Game(winnerDeck, loserDeck));
 
         mockMvc.perform(get("/api/game/" + testGame.getId() + "/opponentTurn"))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(status().reason("Der Gegner ist nicht am Zug!"));
+    }
+
+    @Test
+    @DirtiesContext
+    void getOpponentTurnResult_expectThrowGameIsOverException() throws Exception {
+        Game newGame = new Game(winnerDeck, loserDeck);
+        newGame.setFinished(true);
+        Game testGame = gameRepo.save(newGame);
+
+        mockMvc.perform(get("/api/game/" + testGame.getId() + "/opponentTurn"))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().reason("Das Spiel ist vorbei!"));
     }
 }
