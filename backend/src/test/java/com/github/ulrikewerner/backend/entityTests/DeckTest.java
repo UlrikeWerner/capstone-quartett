@@ -126,4 +126,20 @@ class DeckTest {
         assertEquals(2, cardDeck.size());
         assertEquals(dummyCard2, cardDeck.getCards().get(cardDeck.size()-1));
     }
+
+    @Test
+    void Deck_isEmpty_shouldReturnFalse_whenTheDeckIsNotEmpty() {
+        List<Card> cardList = List.of(dummyCard1);
+        Deck cardDeck = new Deck(cardList);
+
+        assertFalse(cardDeck.isEmpty());
+    }
+
+    @Test
+    void Deck_isEmpty_shouldReturnTrue_whenTheDeckIsEmpty() {
+        List<Card> cardList = List.of();
+        Deck cardDeck = new Deck(cardList);
+
+        assertTrue(cardDeck.isEmpty());
+    }
 }

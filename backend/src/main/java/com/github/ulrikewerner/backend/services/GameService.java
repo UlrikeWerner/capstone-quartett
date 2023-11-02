@@ -83,15 +83,15 @@ public class GameService {
             }
         }
 
-        if(game.getPlayerCards().size() == 0 || game.getOpponentCards().size() == 0){
+        if(game.getPlayerCards().isEmpty() || game.getOpponentCards().isEmpty()){
             game.setFinished(true);
         }
         game.setPlayerTurn(!game.isPlayerTurn());
         Game savedGame = gameRepo.save(game);
-        if(game.getPlayerCards().size() == 0){
+        if(game.getPlayerCards().isEmpty()){
             return new FinalGameResultDTO(savedGame, category, winner, playerCard, opponentCard, GameWinner.OPPONENT);
         }
-        if(game.getOpponentCards().size() == 0){
+        if(game.getOpponentCards().isEmpty()){
             return new FinalGameResultDTO(savedGame, category, winner, playerCard, opponentCard, GameWinner.PLAYER);
         }
         return new TurnDTO(savedGame, category, winner, playerCard, opponentCard);

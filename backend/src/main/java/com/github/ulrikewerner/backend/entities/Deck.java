@@ -43,4 +43,8 @@ public class Deck {
     public void addCardToBottom(Card card){
         cards.add(card);
     }
+
+    public boolean isEmpty() {
+        return cards.isEmpty();
+    }
 }
