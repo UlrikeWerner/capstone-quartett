@@ -15,9 +15,11 @@ public class FinalGameResultDTO extends BaseGameStateDTO{
     private CardDTO playerCard;
     private CardDTO opponentCard;
     private GameWinner winner;
+    private boolean isFinished;
 
     public FinalGameResultDTO(Game game) {
         super(game);
+        this.isFinished = game.isFinished();
     }
 
     public FinalGameResultDTO(Game game, String category, TurnWinner turnWinner, Card playerCard, Card opponentCard, GameWinner gameWinner) {
@@ -27,5 +29,6 @@ public class FinalGameResultDTO extends BaseGameStateDTO{
         this.playerCard = new CardDTO(playerCard);
         this.opponentCard = new CardDTO(opponentCard);
         this.winner = gameWinner;
+        this.isFinished = game.isFinished();
     }
 }

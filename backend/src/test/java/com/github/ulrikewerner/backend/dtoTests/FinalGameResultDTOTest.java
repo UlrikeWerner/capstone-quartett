@@ -21,11 +21,13 @@ class FinalGameResultDTOTest {
         Deck player = new Deck(List.of());
         Deck opponent = new Deck(List.of(kielCard, holnisCard));
         Game testGame = new Game(player, opponent);
+        testGame.setFinished(true);
 
         FinalGameResultDTO testFinalGameResultDTO = new FinalGameResultDTO(testGame);
 
         assertEquals(0, testFinalGameResultDTO.getScore().get("player"));
         assertEquals(2, testFinalGameResultDTO.getScore().get("opponent"));
+        assertTrue(testFinalGameResultDTO.isFinished());
         assertNull(testFinalGameResultDTO.getCategory());
         assertNull(testFinalGameResultDTO.getTurnWinner());
         assertNull(testFinalGameResultDTO.getPlayerCard());
@@ -38,6 +40,7 @@ class FinalGameResultDTOTest {
         Deck player = new Deck(List.of());
         Deck opponent = new Deck(List.of(holnisCard, kielCard, flensburgCard));
         Game testGame = new Game(player, opponent);
+        testGame.setFinished(true);
 
         FinalGameResultDTO testFinalGameResultDTO = new FinalGameResultDTO(testGame, "test", TurnWinner.OPPONENT, flensburgCard, kielCard, GameWinner.OPPONENT);
 
@@ -46,6 +49,7 @@ class FinalGameResultDTOTest {
         assertEquals("test", testFinalGameResultDTO.getCategory());
         assertEquals(TurnWinner.OPPONENT, testFinalGameResultDTO.getTurnWinner());
         assertEquals(GameWinner.OPPONENT ,testFinalGameResultDTO.getWinner());
+        assertTrue(testFinalGameResultDTO.isFinished());
 
         assertNotNull(testFinalGameResultDTO.getPlayerCard());
         assertEquals("Flensburg Seemöwen", testFinalGameResultDTO.getPlayerCard().getName());
