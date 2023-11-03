@@ -25,7 +25,8 @@ export default function Game() {
     const [cardsInDeckPlayer, setCardsInDeckPlayer] = useState<number>(0);
     const [cardsInDeckOpponent, setCardsInDeckOpponent] = useState<number>();
     const [opponentCardIsClickable, setOpponentCardIsClickable] = useState<boolean>(false);
-    const [gameContinueButtonIsVisible, setGameContinueButtonIsVisible] = useState<boolean>(false);
+    const [showInfoButton, setShowInfoButton] = useState<boolean>(false);
+    const [continueButton, setContinueButton] = useState<boolean>(true);
 
     useEffect(() => {
         getGame();
@@ -101,10 +102,9 @@ export default function Game() {
                 }
                 setInfoText(`Die Kategorie: ${chosenCategory.category} wurde gewählt. \n ${winner} diese Runde gewonnen.`);
                 setInstructionText("");
-                setGameContinueButtonIsVisible(true);
+                setShowInfoButton(true);
+                setContinueButton(true);
                 setOpponentCardIsLaidOut(false);
-                setCardsInDeckOpponent(response.data.score.opponent);
-                setCardsInDeckPlayer(response.data.score.player);
                 setCanChooseCategory(false);
             })
             .catch(() => {
@@ -146,10 +146,8 @@ export default function Game() {
                 setInfoText(`Der Gegner ist am Zug! \n Die Kategorie: ${response.data.category} wurde gewählt.`);
                 setInstructionText(GAME_INFO_TEXTS.seeOpponentCard);
                 setOpponentCardIsLaidOut(true);
-                setCardsInDeckOpponent(response.data.score.opponent);
                 setPlayerDeckIsClickable(false);
                 setOpponentCardIsClickable(true);
-                setCardsInDeckPlayer(response.data.score.player);
                 setCanChooseCategory(false);
             })
             .catch(() => {
@@ -205,8 +203,9 @@ export default function Game() {
                 break;
         }
         setInfoText(`${winner} diese Runde gewonnen.`);
-        setInstructionText(GAME_INFO_TEXTS.resultChosenCategoryContinue);
-        setGameContinueButtonIsVisible(true);
+        setInstructionText("");
+        setShowInfoButton(true);
+        setContinueButton(true);
     }
 
     function chooseCategory(category: string) {
@@ -215,13 +214,17 @@ export default function Game() {
     }
 
     function clearPlayingCards() {
-        setGameContinueButtonIsVisible(false);
+        setShowInfoButton(false);
         setCanChooseCategory(false);
         setOpponentCardIsVisible(false);
         setOpponentCardIsLaidOut(false);
         setOpponentCardIsClickable(false);
         setPlayerCardIsLaidOut(false);
         setPlayerCardIsVisible(false);
+        if(runningGameState?.score){
+            setCardsInDeckOpponent(runningGameState.score.opponent);
+            setCardsInDeckPlayer(runningGameState.score.player);
+        }
         if(runningGameState?.finished){
             let winner: string;
             if(runningGameState.winner === "PLAYER"){
@@ -232,10 +235,12 @@ export default function Game() {
             setInfoText(`${GAME_INFO_TEXTS.gameOver} \n ${winner}`);
             setInstructionText("");
             setPlayerDeckIsClickable(false);
+            setShowInfoButton(true);
+            setContinueButton(false);
         } else {
             setPlayerDeckIsClickable(true);
-            setInfoText(GAME_INFO_TEXTS.resultChosenCategoryContinue);
-            setInstructionText("");
+            setInfoText("");
+            setInstructionText(GAME_INFO_TEXTS.resultChosenCategoryContinue);
         }
     }
 
@@ -249,7 +254,12 @@ export default function Game() {
                         <ScoreBoard playerScore={runningGameState.score.player}
                                     opponentScore={runningGameState.score.opponent}/>
                         <section className="infoField">
-                            <Info infoText={infoText} instructionText={instructionText} showButton={gameContinueButtonIsVisible} continueButtonClick={clearPlayingCards}/>
+                            <Info infoText={infoText}
+                                  instructionText={instructionText}
+                                  showButton={showInfoButton}
+                                  continueButton={continueButton}
+                                  continueButtonClick={clearPlayingCards}
+                            />
                         </section>
 
                         <section className="deck player-deck">
