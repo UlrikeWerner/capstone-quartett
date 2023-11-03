@@ -168,6 +168,8 @@ export default function Game() {
             setPlayerCardIsVisible(true);
             setPlayerDeckIsClickable(false);
         } else if (runningGameState?.actualTurn === "PLAYER" && runningGameState?.nextTurnBy === "OPPONENT") {
+            setPlayerCardIsVisible(true);
+            setPlayerCardIsLaidOut(false);
             getOpponentTurnResult();
         } else {
             setErrorMessage("Unerwarteter Zustand des Spiels!")
@@ -204,7 +206,7 @@ export default function Game() {
         }
         setInfoText(`${winner} diese Runde gewonnen.`);
         setInstructionText(GAME_INFO_TEXTS.resultChosenCategoryContinue);
-        setPlayerDeckIsClickable(true);
+        setGameContinueButtonIsVisible(true);
     }
 
     function chooseCategory(category: string) {
@@ -213,7 +215,28 @@ export default function Game() {
     }
 
     function clearPlayingCards() {
-        console.log("klick");
+        setGameContinueButtonIsVisible(false);
+        setCanChooseCategory(false);
+        setOpponentCardIsVisible(false);
+        setOpponentCardIsLaidOut(false);
+        setOpponentCardIsClickable(false);
+        setPlayerCardIsLaidOut(false);
+        setPlayerCardIsVisible(false);
+        if(runningGameState?.finished){
+            let winner: string;
+            if(runningGameState.winner === "PLAYER"){
+                winner = "Du hast das Spiel gewonnen!"
+            } else {
+                winner = "Der Gegner hat das Spiel gewonnen!"
+            }
+            setInfoText(`${GAME_INFO_TEXTS.gameOver} \n ${winner}`);
+            setInstructionText("");
+            setPlayerDeckIsClickable(false);
+        } else {
+            setPlayerDeckIsClickable(true);
+            setInfoText(GAME_INFO_TEXTS.resultChosenCategoryContinue);
+            setInstructionText("");
+        }
     }
 
     return (

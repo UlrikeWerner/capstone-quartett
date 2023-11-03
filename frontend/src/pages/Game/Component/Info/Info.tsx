@@ -14,7 +14,7 @@ export default function Info(props: InfoProps) {
             <h2>{props.infoText}</h2>
             <p>{props.instructionText}</p>
             {props.showButton &&
-                <div className="button-size">
+                <div className="button-wrapper">
                     <BasicButton text="weiter" buttonClick={props.continueButtonClick}/>
                 </div>
             }

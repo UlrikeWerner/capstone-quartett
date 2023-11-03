@@ -10,6 +10,7 @@
   h2 {
     color: color.$font-color-25-black;
     text-align: center;
+    font-size: 1.35rem;
     padding: 1rem 0.75rem 0 0.75rem;
     margin-top: 0.25rem;
     margin-bottom: 0;
@@ -24,10 +25,11 @@
     margin: 0;
   }
 
-  .button-size {
-    margin: 0 0 0.5rem 0.75rem;
+  .button-wrapper {
+    margin: 0 0.75rem 0.5rem auto;
     height: 1.5rem;
     width: 5rem;
+    text-align: right;
     border: solid color.$button-border-color 2px;
   }
 }
