@@ -343,7 +343,7 @@ export default function Game() {
                                                     <p className="game-over-text">Gewonnen!</p>
                                                 </>
                                             :
-                                                <p className="game-over-text">leider verloren!</p>
+                                                <p className="game-over-text">Leider verloren</p>
                                     }
                                 </div>
                             </section>
