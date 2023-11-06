@@ -17,4 +17,6 @@ export type GameStateDTO = {
     turnWinner?: "PLAYER" | "OPPONENT" | "DRAW";
     playerCard?: CardDTO;
     opponentCard?: CardDTO;
+    winner?: "PLAYER" | "OPPONENT"
+    finished?: boolean
 }

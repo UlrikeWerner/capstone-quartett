@@ -3,7 +3,8 @@
 .lobby {
   min-height: 100vh;
   h1 {
-    padding-top: 1.5rem;
+    padding-top: 2.5rem;
+    margin-top: 0;
     text-align: center;
     font-size: 3rem;
   }
@@ -60,27 +61,6 @@
       .stitch-button-3 {
         bottom: 0;
       }
-    }
-  }
-
-  .football-button {
-    height: 100%;
-    width: 100%;
-    display: inline-block;
-    outline: none;
-    cursor: pointer;
-    border: none;
-    text-align: center;
-    background: transparent;
-    color: color.$football-button-font-color;
-    font-weight: 600;
-    font-size: 1.1rem;
-    transition: all 0.2s ease-in-out;
-
-
-    &:is(:hover, :focus) {
-      background-color: color.$football-button-action-background;
-      color: color.$football-button-action-font-color;
     }
   }
 }

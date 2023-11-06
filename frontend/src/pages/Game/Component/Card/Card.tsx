@@ -54,7 +54,7 @@ export default function Card(props: CardDeckProps) {
                     (props.playCardIsClickable
                     ?
                         <button type="button"
-                              className={"card card-absolute card-" + props.owner}
+                              className={"card card-absolute card-clickable card-" + props.owner}
                               onClick={props.seeOpponentCard}
                         >
                             <NFLIcons.NFL size={200}/>

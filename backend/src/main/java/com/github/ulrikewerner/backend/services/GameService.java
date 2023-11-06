@@ -1,11 +1,10 @@
 package com.github.ulrikewerner.backend.services;
 
+import com.github.ulrikewerner.backend.dto.FinalGameResultDTO;
 import com.github.ulrikewerner.backend.dto.TurnDTO;
 import com.github.ulrikewerner.backend.entities.*;
-import com.github.ulrikewerner.backend.exception.CategoryNotFoundException;
-import com.github.ulrikewerner.backend.exception.GameNotFoundException;
-import com.github.ulrikewerner.backend.exception.NotOpponentTurnException;
-import com.github.ulrikewerner.backend.exception.NotYourTurnException;
+import com.github.ulrikewerner.backend.exception.*;
+import com.github.ulrikewerner.backend.interfaces.GameTurn;
 import com.github.ulrikewerner.backend.repositories.GameRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,8 +39,11 @@ public class GameService {
         return gameRepo.findById(id);
     }
 
-    public TurnDTO getOpponentTurnResult(String gameId) throws CategoryNotFoundException, GameNotFoundException, NotOpponentTurnException {
+    public GameTurn getOpponentTurnResult(String gameId) throws CategoryNotFoundException, GameNotFoundException, NotOpponentTurnException, GameIsOverException {
         Game currentGame = getGameById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+        if(currentGame.isFinished()){
+            throw new GameIsOverException();
+        }
         if (currentGame.isPlayerTurn()) {
             throw new NotOpponentTurnException();
         }
@@ -49,17 +51,20 @@ public class GameService {
         return getTurnResult(currentGame, attribute.name());
     }
 
-    public TurnDTO getPlayerTurnResult(String gameId, String category)
-            throws GameNotFoundException, CategoryNotFoundException, NotYourTurnException {
+    public GameTurn getPlayerTurnResult(String gameId, String category)
+            throws GameNotFoundException, CategoryNotFoundException, NotYourTurnException, GameIsOverException {
 
         Game currentGame = getGameById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+        if(currentGame.isFinished()){
+            throw new GameIsOverException();
+        }
         if (!currentGame.isPlayerTurn()) {
             throw new NotYourTurnException();
         }
         return getTurnResult(currentGame, category);
     }
 
-    private TurnDTO getTurnResult(Game game, String category) throws CategoryNotFoundException {
+    private GameTurn getTurnResult(Game game, String category) throws CategoryNotFoundException {
         Card playerCard = game.getPlayerCards().drawFirstCard().orElseThrow();
         Card opponentCard = game.getOpponentCards().drawFirstCard().orElseThrow();
         TurnWinner winner = cardService.compare(playerCard, opponentCard, category);
@@ -77,8 +82,18 @@ public class GameService {
                 game.getOpponentCards().addCardToBottom(playerCard);
             }
         }
+
+        if(game.getPlayerCards().isEmpty() || game.getOpponentCards().isEmpty()){
+            game.setFinished(true);
+        }
         game.setPlayerTurn(!game.isPlayerTurn());
         Game savedGame = gameRepo.save(game);
+        if(game.getPlayerCards().isEmpty()){
+            return new FinalGameResultDTO(savedGame, category, winner, playerCard, opponentCard, GameWinner.OPPONENT);
+        }
+        if(game.getOpponentCards().isEmpty()){
+            return new FinalGameResultDTO(savedGame, category, winner, playerCard, opponentCard, GameWinner.PLAYER);
+        }
         return new TurnDTO(savedGame, category, winner, playerCard, opponentCard);
     }
 }

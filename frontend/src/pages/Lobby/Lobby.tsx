@@ -1,6 +1,7 @@
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import "./lobby.scss";
+import BasicButton from "../../Component/BasicButton.tsx";
 
 export default function Lobby() {
     const navigate = useNavigate();
@@ -23,9 +24,9 @@ export default function Lobby() {
                 <div className="football-basic-line-class football-line bottom-line"></div>
                 <div className="football-basic-line-class football-stitching">
                     <div className="football-basic-line-class stitch-button-line">
-                        <button className="football-button" onClick={createNewGame}>
-                            Neues Spiel
-                        </button>
+                        <BasicButton text="Neues Spiel"
+                                     buttonClick={createNewGame}
+                        />
                     </div>
                     <div className="football-basic-line-class stitch-button-line stitch-button-2"></div>
                     <div className="football-basic-line-class stitch-button-line stitch-button-3"></div>

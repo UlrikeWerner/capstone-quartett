@@ -17,7 +17,7 @@ class TurnDTOTest {
     private final Card luebeckCard = new Card("4", "Lübecker Meerjungfrauen", NflLogoAcronym.NO, new ArrayList<>(List.of(standardAttribute)));
 
     @Test
-    void GameStateDTO_smallConstructor_createCorrectObject(){
+    void TurnDTO_smallConstructor_createCorrectObject(){
         Deck player = new Deck(List.of(flensburgCard));
         Deck opponent = new Deck(List.of(kielCard, holnisCard));
         Game testGame = new Game(player, opponent);
@@ -37,7 +37,7 @@ class TurnDTOTest {
     }
 
     @Test
-    void GameStateDTO_fullConstructor_createCorrectObject(){
+    void TurnDTO_fullConstructor_createCorrectObject(){
         Deck player = new Deck(List.of(flensburgCard, luebeckCard));
         Deck opponent = new Deck(List.of(kielCard, holnisCard));
         Game testGame = new Game(player, opponent);

@@ -55,16 +55,16 @@ class DeckTest {
 
     @Test
     void Deck_shuffleDeck_expectedTwoShuffledDecksAreNotTheSame() {
-        List<Card> cardList = List.of(dummyCard1, dummyCard2, dummyCard3, dummyCard4);
-        List<Card> cardList2 = List.of(dummyCard1, dummyCard2, dummyCard3, dummyCard4);
+        List<Card> cardList = List.of(dummyCard1, dummyCard2, dummyCard3, dummyCard4, dummyCard1, dummyCard2, dummyCard3, dummyCard4);
+        List<Card> cardList2 = List.of(dummyCard1, dummyCard2, dummyCard3, dummyCard4, dummyCard1, dummyCard2, dummyCard3, dummyCard4);
 
         Deck cardDeck1 = new Deck(cardList);
-        Deck cartDeck2 = new Deck(cardList2);
+        Deck cardDeck2 = new Deck(cardList2);
 
         cardDeck1.shuffleDeck();
-        cartDeck2.shuffleDeck();
+        cardDeck2.shuffleDeck();
 
-        assertNotEquals(cardDeck1, cartDeck2);
+        assertNotEquals(cardDeck1, cardDeck2);
     }
 
     @Test
@@ -125,5 +125,21 @@ class DeckTest {
 
         assertEquals(2, cardDeck.size());
         assertEquals(dummyCard2, cardDeck.getCards().get(cardDeck.size()-1));
+    }
+
+    @Test
+    void Deck_isEmpty_shouldReturnFalse_whenTheDeckIsNotEmpty() {
+        List<Card> cardList = List.of(dummyCard1);
+        Deck cardDeck = new Deck(cardList);
+
+        assertFalse(cardDeck.isEmpty());
+    }
+
+    @Test
+    void Deck_isEmpty_shouldReturnTrue_whenTheDeckIsEmpty() {
+        List<Card> cardList = List.of();
+        Deck cardDeck = new Deck(cardList);
+
+        assertTrue(cardDeck.isEmpty());
     }
 }
