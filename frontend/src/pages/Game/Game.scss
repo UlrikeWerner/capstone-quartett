@@ -63,11 +63,11 @@
     left: 50%;
     translate:  -50% -25%;
     background-image: url("/src/assets/wood-pattern.png");
-    background-color: #330800;
+    background-color: color.$wood-color;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     aspect-ratio: 1 / 1;
     border-radius: 50%;
-    border: solid #330800 2px;
+    border: solid color.$wood-color 2px;
     width: 18rem;
     animation: game-over-animation 1.25s ease-in-out;
     animation-iteration-count: 1;
@@ -91,8 +91,8 @@
     translate: -50% -100%;
     font-size: 3.25rem;
     font-weight: bold;
-    color: silver;
-    -webkit-text-stroke: 2px black;
+    color: color.$game-over-font;
+    -webkit-text-stroke: 2px color.$game-over-font-stroke;
     text-align: center;
   }
 }
