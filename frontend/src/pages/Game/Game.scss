@@ -1,6 +1,7 @@
 @use "src/styles/color";
 
 .gameBoard {
+  margin: 0.5rem;
   display: grid;
   grid-template-columns: 1fr 1.5fr 1.5fr 1fr;
   grid-template-areas:

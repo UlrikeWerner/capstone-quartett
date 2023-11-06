@@ -135,6 +135,15 @@ export default function Game() {
                     setRunningGameState(
                         {
                             ...runningGameState,
+                            category: response.data.category,
+                            nextPlayerCard: response.data.nextPlayerCard,
+                            nextOpponentCard: response.data.opponentCard,
+                            actualTurn: "OPPONENT",
+                            nextTurnBy: response.data.nextTurnBy,
+                            playerCard: response.data.playerCard,
+                            opponentCard: undefined,
+                            nextScore: response.data.score,
+                            turnWinner: response.data.turnWinner,
                             "finished": response.data.finished,
                             "winner": response.data.winner
                         }
@@ -157,6 +166,10 @@ export default function Game() {
 
     function drawCard() {
         if (runningGameState?.actualTurn === "OPPONENT" && runningGameState?.nextTurnBy === "PLAYER") {
+            setRunningGameState({
+                ...runningGameState,
+                "playerCard": runningGameState.nextPlayerCard
+            });
             setCanChooseCategory(true);
             setInfoText(GAME_INFO_TEXTS.chooseCategory);
             setInstructionText(GAME_INFO_TEXTS.startChooseCategoryInfo);
@@ -166,6 +179,10 @@ export default function Game() {
             setPlayerCardIsVisible(true);
             setPlayerDeckIsClickable(false);
         } else if (runningGameState?.actualTurn === "PLAYER" && runningGameState?.nextTurnBy === "OPPONENT") {
+            setRunningGameState({
+                ...runningGameState,
+                "playerCard": runningGameState.nextPlayerCard
+            });
             setPlayerCardIsVisible(true);
             setPlayerCardIsLaidOut(false);
             getOpponentTurnResult();
