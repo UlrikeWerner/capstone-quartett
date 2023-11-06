@@ -64,9 +64,9 @@ export default function Game() {
                 return response;
             })
             .then((response) => {
-                if(response.data.finished){
+                if (response.data.finished) {
                     let winner: string;
-                    if(response.data.score.opponent === 0){
+                    if (response.data.score.opponent === 0) {
                         winner = "Du hast";
                     } else {
                         winner = "Der Gegner hat";
@@ -131,7 +131,7 @@ export default function Game() {
                         }
                     );
                 }
-                if(runningGameState && response.data.finished){
+                if (runningGameState && response.data.finished) {
                     setRunningGameState(
                         {
                             ...runningGameState,
@@ -238,13 +238,13 @@ export default function Game() {
         setOpponentCardIsClickable(false);
         setPlayerCardIsLaidOut(false);
         setPlayerCardIsVisible(false);
-        if(runningGameState?.score){
+        if (runningGameState?.score) {
             setCardsInDeckOpponent(runningGameState.score.opponent);
             setCardsInDeckPlayer(runningGameState.score.player);
         }
-        if(runningGameState?.finished){
+        if (runningGameState?.finished) {
             let winner: string;
-            if(runningGameState.winner === "PLAYER"){
+            if (runningGameState.winner === "PLAYER") {
                 winner = "Du hast das Spiel gewonnen!"
             } else {
                 winner = "Der Gegner hat das Spiel gewonnen!"
@@ -330,6 +330,24 @@ export default function Game() {
                                   cardsInDeck={cardsInDeckOpponent}
                             />
                         </section>
+
+                        { !continueButton &&
+                            <section className="victory-wrapper">
+                                <div className="victory-content">
+                                    {
+                                        runningGameState &&
+                                        (runningGameState.winner === "PLAYER")
+                                            ?
+                                                <>
+                                                    <img src="/src/assets/leaves-wreath.svg" className="victory-image" alt="gewonnen"/>
+                                                    <p className="game-over-text">Gewonnen!</p>
+                                                </>
+                                            :
+                                                <p className="game-over-text">leider verloren!</p>
+                                    }
+                                </div>
+                            </section>
+                        }
                     </section>
             }
         </>
