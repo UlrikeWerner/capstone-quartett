@@ -8,6 +8,7 @@ import ScoreBoard from "./Component/ScoreBoard/ScoreBoard.tsx";
 import Info from "./Component/Info/Info.tsx";
 import Card from "./Component/Card/Card.tsx";
 import {TurnResultInputDTO} from "../../types/TurnResultInputDTO.ts";
+import leavesWreath from "../../assets/leaves-wreath.svg";
 
 export default function Game() {
     const {id} = useParams();
@@ -23,7 +24,7 @@ export default function Game() {
     const [opponentCardIsLaidOut, setOpponentCardIsLaidOut] = useState<boolean>(false);
     const [canChooseCategory, setCanChooseCategory] = useState<boolean>(false);
     const [cardsInDeckPlayer, setCardsInDeckPlayer] = useState<number>(0);
-    const [cardsInDeckOpponent, setCardsInDeckOpponent] = useState<number>();
+    const [cardsInDeckOpponent, setCardsInDeckOpponent] = useState<number>(0);
     const [opponentCardIsClickable, setOpponentCardIsClickable] = useState<boolean>(false);
     const [showInfoButton, setShowInfoButton] = useState<boolean>(false);
     const [continueButton, setContinueButton] = useState<boolean>(true);
@@ -165,6 +166,7 @@ export default function Game() {
     }
 
     function drawCard() {
+        setCardsInDeckOpponent(cardsInDeckOpponent - 1);
         if (runningGameState?.actualTurn === "OPPONENT" && runningGameState?.nextTurnBy === "PLAYER") {
             setRunningGameState({
                 ...runningGameState,
@@ -327,11 +329,11 @@ export default function Game() {
                             <Card type="deck"
                                   owner="opponent"
                                   score={runningGameState.score.opponent}
-                                  cardsInDeck={cardsInDeckOpponent}
+                                  cardsInDeck= {cardsInDeckOpponent}
                             />
                         </section>
 
-                        { !continueButton &&
+                        {!continueButton &&
                             <section className="victory-wrapper">
                                 <div className="victory-content">
                                     {
@@ -339,7 +341,7 @@ export default function Game() {
                                         (runningGameState.winner === "PLAYER")
                                             ?
                                                 <>
-                                                    <img src="/src/assets/leaves-wreath.svg" className="victory-image" alt="gewonnen"/>
+                                                    <img src={leavesWreath} className="victory-image" alt="gewonnen"/>
                                                     <p className="game-over-text">Gewonnen!</p>
                                                 </>
                                             :
