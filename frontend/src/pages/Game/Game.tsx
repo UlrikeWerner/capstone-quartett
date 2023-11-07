@@ -24,7 +24,7 @@ export default function Game() {
     const [opponentCardIsLaidOut, setOpponentCardIsLaidOut] = useState<boolean>(false);
     const [canChooseCategory, setCanChooseCategory] = useState<boolean>(false);
     const [cardsInDeckPlayer, setCardsInDeckPlayer] = useState<number>(0);
-    const [cardsInDeckOpponent, setCardsInDeckOpponent] = useState<number>();
+    const [cardsInDeckOpponent, setCardsInDeckOpponent] = useState<number>(0);
     const [opponentCardIsClickable, setOpponentCardIsClickable] = useState<boolean>(false);
     const [showInfoButton, setShowInfoButton] = useState<boolean>(false);
     const [continueButton, setContinueButton] = useState<boolean>(true);
@@ -166,6 +166,7 @@ export default function Game() {
     }
 
     function drawCard() {
+        setCardsInDeckOpponent(cardsInDeckOpponent - 1);
         if (runningGameState?.actualTurn === "OPPONENT" && runningGameState?.nextTurnBy === "PLAYER") {
             setRunningGameState({
                 ...runningGameState,
@@ -328,7 +329,7 @@ export default function Game() {
                             <Card type="deck"
                                   owner="opponent"
                                   score={runningGameState.score.opponent}
-                                  cardsInDeck={cardsInDeckOpponent}
+                                  cardsInDeck= {cardsInDeckOpponent}
                             />
                         </section>
 
