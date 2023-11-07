@@ -9,8 +9,8 @@ import com.github.ulrikewerner.backend.repositories.GameRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,13 +18,14 @@ public class GameService {
 
     private final CardService cardService;
     private final GameRepo gameRepo;
+
     public Game startNewGame() {
         Deck cardDeck = new Deck(cardService.getAllCards());
         cardDeck.shuffleDeck();
 
         ArrayList<Card> playerCards = new ArrayList<>();
         ArrayList<Card> opponentCards = new ArrayList<>();
-        while (cardDeck.size() > 1){
+        while (cardDeck.size() > 1) {
             Optional<Card> optionalCard1 = cardDeck.drawFirstCard();
             Optional<Card> optionalCard2 = cardDeck.drawFirstCard();
 
@@ -41,7 +42,7 @@ public class GameService {
 
     public GameTurn getOpponentTurnResult(String gameId) throws CategoryNotFoundException, GameNotFoundException, NotOpponentTurnException, GameIsOverException {
         Game currentGame = getGameById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
-        if(currentGame.isFinished()){
+        if (currentGame.isFinished()) {
             throw new GameIsOverException();
         }
         if (currentGame.isPlayerTurn()) {
@@ -55,7 +56,7 @@ public class GameService {
             throws GameNotFoundException, CategoryNotFoundException, NotYourTurnException, GameIsOverException {
 
         Game currentGame = getGameById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
-        if(currentGame.isFinished()){
+        if (currentGame.isFinished()) {
             throw new GameIsOverException();
         }
         if (!currentGame.isPlayerTurn()) {
@@ -83,17 +84,27 @@ public class GameService {
             }
         }
 
-        if(game.getPlayerCards().isEmpty() || game.getOpponentCards().isEmpty()){
+        if (game.getPlayerCards().isEmpty() || game.getOpponentCards().isEmpty()) {
             game.setFinished(true);
         }
         game.setPlayerTurn(!game.isPlayerTurn());
         Game savedGame = gameRepo.save(game);
-        if(game.getPlayerCards().isEmpty()){
+        if (game.getPlayerCards().isEmpty()) {
             return new FinalGameResultDTO(savedGame, category, winner, playerCard, opponentCard, GameWinner.OPPONENT);
         }
-        if(game.getOpponentCards().isEmpty()){
+        if (game.getOpponentCards().isEmpty()) {
             return new FinalGameResultDTO(savedGame, category, winner, playerCard, opponentCard, GameWinner.PLAYER);
         }
         return new TurnDTO(savedGame, category, winner, playerCard, opponentCard);
+    }
+
+    public List<Game> getOpenGames() {
+        List<Game> games = gameRepo.findAll()
+                .stream()
+                .filter(game -> !game.isFinished())
+                .sorted(Comparator.comparing(Game::getDate))
+                .collect(Collectors.toList());
+        Collections.reverse(games);
+        return games;
     }
 }
