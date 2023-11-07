@@ -8,6 +8,7 @@ import ScoreBoard from "./Component/ScoreBoard/ScoreBoard.tsx";
 import Info from "./Component/Info/Info.tsx";
 import Card from "./Component/Card/Card.tsx";
 import {TurnResultInputDTO} from "../../types/TurnResultInputDTO.ts";
+import leavesWreath from "../../assets/leaves-wreath.svg";
 
 export default function Game() {
     const {id} = useParams();
@@ -331,7 +332,7 @@ export default function Game() {
                             />
                         </section>
 
-                        { !continueButton &&
+                        {!continueButton &&
                             <section className="victory-wrapper">
                                 <div className="victory-content">
                                     {
@@ -339,7 +340,7 @@ export default function Game() {
                                         (runningGameState.winner === "PLAYER")
                                             ?
                                                 <>
-                                                    <img src="/src/assets/leaves-wreath.svg" className="victory-image" alt="gewonnen"/>
+                                                    <img src={leavesWreath} className="victory-image" alt="gewonnen"/>
                                                     <p className="game-over-text">Gewonnen!</p>
                                                 </>
                                             :
