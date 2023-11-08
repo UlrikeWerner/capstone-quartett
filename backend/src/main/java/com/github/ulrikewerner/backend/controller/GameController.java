@@ -1,6 +1,7 @@
 package com.github.ulrikewerner.backend.controller;
 
 import com.github.ulrikewerner.backend.dto.GameStateDTO;
+import com.github.ulrikewerner.backend.dto.OpenGameDTO;
 import com.github.ulrikewerner.backend.dto.PlayerTurnInputDTO;
 import com.github.ulrikewerner.backend.entities.Game;
 import com.github.ulrikewerner.backend.exception.*;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -22,6 +24,11 @@ public class GameController {
     @PostMapping()
     public ResponseEntity<String> startNewGame() {
         return ResponseEntity.ok(gameService.startNewGame().getId());
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<OpenGameDTO>> getOpenGames() {
+        return ResponseEntity.ok(gameService.getOpenGames().stream().map(OpenGameDTO::new).toList());
     }
 
     @GetMapping("/{gameId}")
