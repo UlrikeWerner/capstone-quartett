@@ -14,4 +14,9 @@
     border-color: color.$football-baseline-color;
     color: color.$football-baseline-color;
   }
+
+  &.icon-button {
+    //noinspection CssNoGenericFontName
+    font-family: "Material Symbols Outlined";
+  }
 }
