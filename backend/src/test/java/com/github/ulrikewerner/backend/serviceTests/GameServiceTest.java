@@ -117,4 +117,18 @@ class GameServiceTest {
         verify(gameRepo).findById("quatschId");
         assertEquals(Optional.empty(), optionalGame);
     }
+
+    @Test
+    void deleteGame_shouldBeDeleted(){
+        Deck deck1 = new Deck(List.of(dummyCard1, dummyCard2));
+        Deck deck2 = new Deck(List.of(dummyCard3, dummyCard4));
+
+        Game testGame = new Game(deck1, deck2);
+        testGame.setId("1");
+
+        doNothing().when(gameRepo).deleteById("1");
+        gameService.deleteGame("1");
+
+        verify(gameRepo).deleteById("1");
+    }
 }
