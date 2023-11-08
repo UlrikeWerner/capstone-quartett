@@ -1,4 +1,4 @@
-import "./BasicButton.scss";
+import "./basicButton.scss";
 
 type BasicButtonProps = {
     readonly text: string;
