@@ -1,15 +1,17 @@
 @use 'src/styles/color';
 
 .button {
-  width: 5.5rem;
-  height: 2rem;
+  padding: 0.375rem 0.5rem;
   background-color: color.$football-baseline-color;
   border-radius: 0.5rem;
   color: color.$button-font-color;
   border: none;
+  font-weight: bold;
+  font-size: 1.1rem;
 
   &:is(:hover, :focus) {
     background-color: color.$button-action-background;
     border: 2px solid color.$football-baseline-color;
+    color: color.$football-baseline-color;
   }
 }
