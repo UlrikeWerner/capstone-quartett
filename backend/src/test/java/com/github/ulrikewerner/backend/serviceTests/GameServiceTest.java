@@ -59,6 +59,40 @@ class GameServiceTest {
     }
 
     @Test
+    void getOpenGames_shouldReturnAnEmptyList_whenNoGameAreOpen(){
+        Deck deck1 = new Deck(List.of(dummyCard1, dummyCard2));
+        Deck deck2 = new Deck(List.of(dummyCard3, dummyCard4));
+
+        Game testGame = new Game(deck1, deck2);
+        testGame.setFinished(true);
+
+        when(gameRepo.findAll()).thenReturn(List.of(testGame));
+
+        List<Game> actuelGameList = gameService.getOpenGames();
+
+        verify(gameRepo).findAll();
+        assertEquals(List.of(), actuelGameList);
+    }
+
+    @Test
+    void getOpenGames_shouldReturnListOfGames_whenThereAreOpenGames(){
+        Deck deck1 = new Deck(List.of(dummyCard1, dummyCard2));
+        Deck deck2 = new Deck(List.of(dummyCard3, dummyCard4));
+
+        Game testGame1 = new Game(deck1, deck2);
+        Game testGame2 = new Game(deck2, deck1);
+        Game testGame3 = new Game(deck1, deck2);
+        testGame2.setFinished(true);
+
+        when(gameRepo.findAll()).thenReturn(List.of(testGame1, testGame2, testGame3));
+
+        List<Game> actuelGameList = gameService.getOpenGames();
+
+        verify(gameRepo).findAll();
+        assertEquals(List.of(testGame3, testGame1), actuelGameList);
+    }
+
+    @Test
     void getGameById_shouldReturnAnOptionalOfTheRightGame(){
         Deck deck1 = new Deck(List.of(dummyCard1, dummyCard2));
         Deck deck2 = new Deck(List.of(dummyCard3, dummyCard4));

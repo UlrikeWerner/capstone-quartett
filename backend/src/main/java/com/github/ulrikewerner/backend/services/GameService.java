@@ -36,6 +36,16 @@ public class GameService {
         return gameRepo.save(new Game(new Deck(playerCards), new Deck(opponentCards)));
     }
 
+    public List<Game> getOpenGames() {
+        List<Game> games = gameRepo.findAll()
+                .stream()
+                .filter(game -> !game.isFinished())
+                .sorted(Comparator.comparing(Game::getDate))
+                .collect(Collectors.toList());
+        Collections.reverse(games);
+        return games;
+    }
+
     public Optional<Game> getGameById(String id) {
         return gameRepo.findById(id);
     }
@@ -96,15 +106,5 @@ public class GameService {
             return new FinalGameResultDTO(savedGame, category, winner, playerCard, opponentCard, GameWinner.PLAYER);
         }
         return new TurnDTO(savedGame, category, winner, playerCard, opponentCard);
-    }
-
-    public List<Game> getOpenGames() {
-        List<Game> games = gameRepo.findAll()
-                .stream()
-                .filter(game -> !game.isFinished())
-                .sorted(Comparator.comparing(Game::getDate))
-                .collect(Collectors.toList());
-        Collections.reverse(games);
-        return games;
     }
 }
