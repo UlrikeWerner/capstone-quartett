@@ -3,6 +3,7 @@ package com.github.ulrikewerner.backend.entities;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 @Getter
@@ -21,7 +22,7 @@ public class Game {
     public Game(Deck playerCards, Deck opponentCards) {
         date = LocalDateTime.now();
         DateTimeFormatter dateFormatObject = DateTimeFormatter.ofPattern("dd.MM.yy, HH:mm");
-        String formattedDate = date.format(dateFormatObject);
+        String formattedDate = date.atZone(ZoneId.of("Europe/Berlin")).format(dateFormatObject);
         title = "Spiel vom " + formattedDate;
         isPlayerTurn = true;
         this.playerCards = playerCards;
