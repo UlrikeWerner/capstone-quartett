@@ -7,7 +7,7 @@ type FootballButtonProps = {
 export default function FootballButton(props: FootballButtonProps) {
 
     return (
-        <button className="button"
+        <button className="football-button"
                 type="button"
                 onClick={props.buttonClick}
         >
