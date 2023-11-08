@@ -3,6 +3,7 @@ package com.github.ulrikewerner.backend.integrationTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ulrikewerner.backend.entities.*;
 import com.github.ulrikewerner.backend.repositories.GameRepo;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,9 +11,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -48,19 +52,66 @@ class GameControllerIntegrationTest {
     @Test
     @DirtiesContext
     void startNewGame_expectIdOfTheNewGame() throws Exception {
+        Game testGame = gameRepo.save(new Game(winnerDeck, loserDeck));
 
-        String actual = mockMvc.perform(
-                        post("/api/game")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
-                                        {}
-                                        """))
+        mockMvc.perform(get("/api/game/" + testGame.getId()))
                 .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
+                .andExpect(content().json("""
+                        {
+                            "score": {
+                                "opponent": 1,
+                                "player": 2
+                            },
+                            "nextTurnBy": "PLAYER",
+                            "nextPlayerCard": {
+                                "name": "Detroit Lions",
+                                "logo": "DET",
+                                "attributes": {
+                                    "Punkte pro Spiel": "26.65"
+                                }
+                            }
+                        }
+                        """));
+    }
 
-        assertThat(actual).isNotNull().isNotEqualTo("");
+    @Test
+    @DirtiesContext
+    void getOpenGames_expectEmptyList_whenNoGameIsOpen() throws Exception {
+        Game game = new Game(winnerDeck, loserDeck);
+        game.setFinished(true);
+        gameRepo.save(game);
+
+        mockMvc.perform(get("/api/game"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        []
+                        """));
+    }
+
+    @Test
+    @DirtiesContext
+    void getOpenGames_expectListOfGames_whenGamesAreStillOpen() throws Exception {
+        Game game1 = new Game(winnerDeck, loserDeck);
+        Game game2 = new Game(winnerDeck, loserDeck);
+        Game game3 = new Game(loserDeck, winnerDeck);
+        game2.setFinished(true);
+        gameRepo.save(game1);
+        gameRepo.save(game2);
+        gameRepo.save(game3);
+
+        MvcResult result = mockMvc.perform(get("/api/game"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        String jsonResponse = result.getResponse().getContentAsString();
+        List<Object> gameList = JsonPath.read(jsonResponse, "$[*]");
+
+        for (Object game : gameList) {
+            assertThat(Optional.ofNullable(JsonPath.read(game, "$.gameId"))).isNotNull();
+            assertThat(Optional.ofNullable(JsonPath.read(game, "$.title"))).isNotNull();
+        }
     }
 
     @Test
@@ -103,14 +154,14 @@ class GameControllerIntegrationTest {
         String id = "quatschId";
 
         mockMvc.perform(put("/api/game/" + id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                        {
-                            "category": "Touchdowns"
-                        }
-                        """))
-                        .andExpect(status().isNotFound())
-                        .andExpect(status().reason("Spiel wurde nicht gefunden!"));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "category": "Touchdowns"
+                                }
+                                """))
+                .andExpect(status().isNotFound())
+                .andExpect(status().reason("Spiel wurde nicht gefunden!"));
     }
 
     @Test
@@ -198,8 +249,8 @@ class GameControllerIntegrationTest {
         Game testGame = gameRepo.save(newGame);
 
         mockMvc.perform(put("/api/game/" + testGame.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
                                 {
                                     "category": "Touchdowns"
                                 }
