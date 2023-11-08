@@ -1,0 +1,15 @@
+@use 'src/styles/color';
+
+.button {
+  width: 5.5rem;
+  height: 2rem;
+  background-color: color.$football-baseline-color;
+  border-radius: 0.5rem;
+  color: color.$button-font-color;
+  border: none;
+
+  &:is(:hover, :focus) {
+    background-color: color.$button-action-background;
+    border: 2px solid color.$football-baseline-color;
+  }
+}

@@ -1,10 +1,10 @@
-import "./BasicButton.scss";
+import "./FootballButton.scss";
 
-type BasicButtonProps = {
+type FootballButtonProps = {
     readonly text: string;
     readonly buttonClick: () => void;
 }
-export default function BasicButton(props: BasicButtonProps) {
+export default function FootballButton(props: FootballButtonProps) {
 
     return (
         <button className="button"

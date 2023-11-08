@@ -1,5 +1,5 @@
 import "./Info.scss";
-import BasicButton from "../../../../Component/BasicButton.tsx";
+import FootballButton from "../../../../Component/FootballButton.tsx";
 import {useNavigate} from "react-router-dom";
 
 type InfoProps = {
@@ -20,9 +20,9 @@ export default function Info(props: InfoProps) {
                 <div className="button-wrapper">
                     {props.continueButton
                         ?
-                            <BasicButton text="weiter" buttonClick={props.continueButtonClick}/>
+                            <FootballButton text="weiter" buttonClick={props.continueButtonClick}/>
                         :
-                            <BasicButton text="Lobby" buttonClick={() => navigate('/lobby')}/>
+                            <FootballButton text="Lobby" buttonClick={() => navigate('/lobby')}/>
                     }
                 </div>
             }
