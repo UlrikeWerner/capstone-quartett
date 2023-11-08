@@ -28,7 +28,11 @@ export default function Lobby() {
                                      buttonClick={createNewGame}
                         />
                     </div>
-                    <div className="football-basic-line-class stitch-button-line stitch-button-2"></div>
+                    <div className="football-basic-line-class stitch-button-line stitch-button-2">
+                        <BasicButton text="Fortsetzen"
+                                     buttonClick={() => navigate("/game")}
+                        />
+                    </div>
                     <div className="football-basic-line-class stitch-button-line stitch-button-3"></div>
                 </div>
             </div>

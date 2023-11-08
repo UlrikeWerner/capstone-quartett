@@ -2,6 +2,7 @@ import './App.scss'
 import {Navigate, Routes, Route} from "react-router-dom";
 import Lobby from './pages/Lobby/Lobby.tsx';
 import Game from "./pages/Game/Game.tsx";
+import GameOverview from "./pages/GameOverview/GameOverview.tsx";
 
 export default function App() {
 
@@ -15,13 +16,13 @@ export default function App() {
                        element={<Lobby/>}
                 />
                 <Route path={"/game"}
-                       element={<Navigate to={"/lobby"}/>}
+                       element={<GameOverview />}
                 />
                 <Route path={"/game/:id"}
-                       element={<Game/>}
+                       element={<Game />}
                 />
                 <Route path={"/*"}
-                       element={<Navigate to={"/lobby"}/>}
+                       element={<Navigate to={"/lobby"} />}
                 />
             </Routes>
         </>
