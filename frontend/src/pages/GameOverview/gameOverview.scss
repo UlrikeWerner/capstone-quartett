@@ -2,7 +2,6 @@
 
 .game-overview {
   min-height: 100vh;
-  width: 100vw;
 
   .headline {
     padding-top: 2.5rem;
@@ -17,6 +16,8 @@
 
   .game-list-wrapper {
     margin: 0 10% 2rem 10%;
+    max-height: calc(100vh - 15rem);
+    overflow-y: auto;
   }
 
   .game-element-wrapper {

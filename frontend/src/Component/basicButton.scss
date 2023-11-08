@@ -5,13 +5,13 @@
   background-color: color.$football-baseline-color;
   border-radius: 0.5rem;
   color: color.$button-font-color;
-  border: none;
+  border: 2px solid transparent;
   font-weight: bold;
   font-size: 1.1rem;
 
   &:is(:hover, :focus) {
     background-color: color.$button-action-background;
-    border: 2px solid color.$football-baseline-color;
+    border-color: color.$football-baseline-color;
     color: color.$football-baseline-color;
   }
 }
