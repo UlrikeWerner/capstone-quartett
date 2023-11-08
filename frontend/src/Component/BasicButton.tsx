@@ -24,7 +24,7 @@ export default function BasicButton(props: BasicButtonProps | BasicButtonSpecial
                     if ("functionValue" in props) {
                         props.buttonClick(props.functionValue);
                     } else {
-                        props.buttonClick
+                        props.buttonClick();
                     }
                 }}
         >
