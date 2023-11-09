@@ -1,7 +1,7 @@
 import "../../App.scss";
 
 type BackdropProps = {
-    open: boolean;
+    readonly open: boolean;
 }
 
 export default function Backdrop(props: BackdropProps) {

@@ -2,10 +2,10 @@ import "./dialog.scss";
 import BasicButton from "../Buttons/BasicButton.tsx";
 
 type DialogProps = {
-    open: boolean;
-    content: string;
-    buttonName: string;
-    buttonFunction: () => void;
+    readonly open: boolean;
+    readonly content: string;
+    readonly buttonName: string;
+    readonly buttonFunction: () => void;
 }
 
 export default function Dialog(props: DialogProps) {
