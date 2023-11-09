@@ -40,10 +40,9 @@ public class GameController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
     @PatchMapping("/{gameId}")
-    public ResponseEntity<Void> updateGameTitle(@PathVariable String gameId, @RequestBody GameTitleDTO title)
+    public ResponseEntity<OpenGameDTO> updateGameTitle(@PathVariable String gameId, @RequestBody GameTitleDTO title)
             throws GameNotFoundException, TitleIsEmptyException {
-        gameService.updateGameTitle(gameId, title.title());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(gameService.updateGameTitle(gameId, title.title()));
     }
 
     @PutMapping("/{gameId}")
