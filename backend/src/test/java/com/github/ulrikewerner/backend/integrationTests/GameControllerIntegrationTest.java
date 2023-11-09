@@ -3,7 +3,6 @@ package com.github.ulrikewerner.backend.integrationTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ulrikewerner.backend.entities.*;
 import com.github.ulrikewerner.backend.repositories.GameRepo;
-import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,8 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.jayway.jsonpath.JsonPath.read;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -106,12 +107,73 @@ class GameControllerIntegrationTest {
                 .andReturn();
 
         String jsonResponse = result.getResponse().getContentAsString();
-        List<Object> gameList = JsonPath.read(jsonResponse, "$[*]");
+        List<Object> gameList = read(jsonResponse, "$[*]");
 
         for (Object game : gameList) {
-            assertThat(Optional.ofNullable(JsonPath.read(game, "$.gameId"))).isNotNull();
-            assertThat(Optional.ofNullable(JsonPath.read(game, "$.title"))).isNotNull();
+            assertThat(Optional.ofNullable(read(game, "$.gameId"))).isNotNull();
+            assertThat(Optional.ofNullable(read(game, "$.title"))).isNotNull();
         }
+    }
+
+    @Test
+    @DirtiesContext
+    void updateGameTitle_throwsTitleIsEmptyException_whenThereIsNoTitleInTheBody() throws Exception {
+        Game game = new Game(winnerDeck, loserDeck);
+        Game savedGame = gameRepo.save(game);
+        String id = savedGame.getId();
+
+        mockMvc.perform(patch("/api/game/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {}
+                                """))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().reason("Der Title darf nicht leer sein!"));
+    }
+
+    @Test
+    @DirtiesContext
+    void updateGameTitle_throwsTitleIsEmptyException_whenTheTitleIsEmpty() throws Exception {
+        Game game = new Game(winnerDeck, loserDeck);
+        Game savedGame = gameRepo.save(game);
+        String id = savedGame.getId();
+
+        mockMvc.perform(patch("/api/game/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "title": "  "
+                                }
+                                """))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().reason("Der Title darf nicht leer sein!"));
+    }
+
+    @Test
+    @DirtiesContext
+    void updateGameTitle_shouldUpdatedTheTitleCorrect() throws Exception {
+        Game game = new Game(winnerDeck, loserDeck);
+        Game savedGame = gameRepo.save(game);
+        String id = savedGame.getId();
+
+        mockMvc.perform(patch("/api/game/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "title": "Test Title"
+                                }
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {
+                            "title": "Test Title"
+                        }
+                        """))
+                .andExpect(result -> {
+                    String jsonResponse = result.getResponse().getContentAsString();
+                    String gameId = read(jsonResponse, "$.gameId");
+                    assertEquals(id, gameId);
+                });
     }
 
     @Test

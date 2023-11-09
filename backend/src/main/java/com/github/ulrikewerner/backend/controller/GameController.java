@@ -1,6 +1,7 @@
 package com.github.ulrikewerner.backend.controller;
 
 import com.github.ulrikewerner.backend.dto.GameStateDTO;
+import com.github.ulrikewerner.backend.dto.GameTitleDTO;
 import com.github.ulrikewerner.backend.dto.OpenGameDTO;
 import com.github.ulrikewerner.backend.dto.PlayerTurnInputDTO;
 import com.github.ulrikewerner.backend.entities.Game;
@@ -37,6 +38,11 @@ public class GameController {
         return optionalGame
                 .map(game -> ResponseEntity.ok(new GameStateDTO(game)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    @PatchMapping("/{gameId}")
+    public ResponseEntity<OpenGameDTO> updateGameTitle(@PathVariable String gameId, @RequestBody GameTitleDTO title)
+            throws GameNotFoundException, TitleIsEmptyException {
+        return ResponseEntity.ok(gameService.updateGameTitle(gameId, title.title()));
     }
 
     @PutMapping("/{gameId}")

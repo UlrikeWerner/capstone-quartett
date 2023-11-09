@@ -1,6 +1,7 @@
 package com.github.ulrikewerner.backend.services;
 
 import com.github.ulrikewerner.backend.dto.FinalGameResultDTO;
+import com.github.ulrikewerner.backend.dto.OpenGameDTO;
 import com.github.ulrikewerner.backend.dto.TurnDTO;
 import com.github.ulrikewerner.backend.entities.*;
 import com.github.ulrikewerner.backend.exception.*;
@@ -48,6 +49,15 @@ public class GameService {
 
     public Optional<Game> getGameById(String id) {
         return gameRepo.findById(id);
+    }
+
+    public OpenGameDTO updateGameTitle(String gameId, String title) throws GameNotFoundException, TitleIsEmptyException {
+        Game currentGame = getGameById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+        if(title == null || title.isBlank()) {
+            throw new TitleIsEmptyException();
+        }
+        currentGame.setTitle(title);
+        return new OpenGameDTO(gameRepo.save(currentGame));
     }
 
     public GameTurn getOpponentTurnResult(String gameId) throws CategoryNotFoundException, GameNotFoundException, NotOpponentTurnException, GameIsOverException {
