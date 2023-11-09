@@ -7,6 +7,14 @@ body {
   font-weight: 400;
   color: color.$font-color;
   margin: 0;
+
+  .backdrop-active {
+    position: absolute;
+    inset: 0;
+    background-color: color.$football-baseline-color;
+    opacity: 0.4;
+    pointer-events: all;
+  }
 }
 
 .flex-row {

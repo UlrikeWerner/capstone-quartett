@@ -3,7 +3,7 @@ import axios from "axios";
 import {OpenGameDTO} from "../../types/OpenGameDTO.ts";
 import {useNavigate} from "react-router-dom";
 import "./gameOverview.scss";
-import BasicButton from "../../Component/BasicButton.tsx";
+import BasicButton from "../../Component/Buttons/BasicButton.tsx";
 
 export default function GameOverview() {
     const navigate = useNavigate();
