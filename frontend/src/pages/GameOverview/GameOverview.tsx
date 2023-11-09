@@ -10,7 +10,7 @@ export default function GameOverview() {
     const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
     const [gameList, setGameList] = useState<OpenGameDTO[]>([]);
     const [idToEdit, setIdToEdit] = useState<string>("");
-    const [titleValue, setTitleValue] = useState<string>();
+    const [titleValue, setTitleValue] = useState<string>("");
 
     useEffect(() => {
         getGameList()
@@ -94,7 +94,6 @@ export default function GameOverview() {
                                         >
                                             check
                                         </button>
-
                                         <BasicButton icon={true}
                                                      tooltip="Abbrechen"
                                                      text="close"
@@ -110,12 +109,12 @@ export default function GameOverview() {
                                     />
                                     <BasicButton text="edit"
                                                  icon={true}
-                                                 tooltip="bearbeiten"
+                                                 tooltip="Bearbeiten"
                                                  buttonClick={() => startEditing(game.gameId, game.title)}
                                     />
                                     <BasicButton text="delete"
                                                  icon={true}
-                                                 tooltip="löschen"
+                                                 tooltip="Löschen"
                                                  functionValue={game.gameId}
                                                  buttonClick={(value: string) => deleteGame(value)}
                                     />
