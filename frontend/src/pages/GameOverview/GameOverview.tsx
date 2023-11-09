@@ -79,6 +79,7 @@ export default function GameOverview() {
                                     <form className="edit-form">
                                         <input className="input-title"
                                                type="text"
+                                               required={true}
                                                value={titleValue}
                                                onChange={event => setTitleValue(event.target.value)}
                                         />
