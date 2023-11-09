@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {GameStateDTO} from "../../types/GameStateDTO.ts";
@@ -16,6 +16,7 @@ import BasicButton from "../../Component/Buttons/BasicButton.tsx";
 
 export default function Game() {
     const {id} = useParams();
+    const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState<string>();
     const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false);
     const [gameState, setGameState] = useState<GameStateDTO>();
@@ -284,6 +285,12 @@ export default function Game() {
                                 text="question_mark"
                                 tooltip="Anleitung"
                                 buttonClick={() => setDialogIsOpen(true)}
+                            />
+                            <BasicButton
+                                icon={true}
+                                text="chevron_left"
+                                tooltip="Lobby"
+                                buttonClick={() => navigate('/lobby')}
                             />
                         </div>
                         <section className="infoField">

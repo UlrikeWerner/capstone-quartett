@@ -39,6 +39,14 @@ export default function GameOverview() {
     return (
         <section className="game-overview">
             <h1 className="headline">Offene Spiele</h1>
+            <div className="games-button-wrapper">
+                <BasicButton
+                    icon={true}
+                    text="chevron_left"
+                    tooltip="Lobby"
+                    buttonClick={() => navigate('/lobby')}
+                />
+            </div>
             {errorMessage
                 ?
                 <p className="error">{errorMessage}</p>
