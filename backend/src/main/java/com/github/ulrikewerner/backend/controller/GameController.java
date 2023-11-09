@@ -50,4 +50,10 @@ public class GameController {
             throws GameNotFoundException, CategoryNotFoundException, NotOpponentTurnException, GameIsOverException {
         return ResponseEntity.ok(gameService.getOpponentTurnResult(gameId));
     }
+
+    @DeleteMapping("/{gameId}")
+    public ResponseEntity<Void> deleteGame(@PathVariable String gameId) {
+        gameService.deleteGame(gameId);
+        return ResponseEntity.ok().build();
+    }
 }

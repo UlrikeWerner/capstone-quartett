@@ -2,7 +2,6 @@
 
 .game-overview {
   min-height: 100vh;
-  width: 100vw;
 
   .headline {
     padding-top: 2.5rem;
@@ -17,15 +16,23 @@
 
   .game-list-wrapper {
     margin: 0 10% 2rem 10%;
+    max-height: calc(100vh - 15rem);
+    overflow-y: auto;
   }
 
   .game-element-wrapper {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 1rem 1.5rem;
 
     .game-title {
       font-size: 1.35rem;
+    }
+
+    .button-wrapper {
+      display: flex;
+      column-gap: 0.5rem;
     }
 
     &:not(:last-child) {

@@ -107,4 +107,8 @@ public class GameService {
         }
         return new TurnDTO(savedGame, category, winner, playerCard, opponentCard);
     }
+
+    public void deleteGame(String id) {
+        gameRepo.deleteById(id);
+    }
 }

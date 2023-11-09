@@ -561,4 +561,20 @@ class GameControllerIntegrationTest {
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(status().reason("Das Spiel ist vorbei!"));
     }
+
+    @Test
+    @DirtiesContext
+    void deleteGame_expectStatusOK() throws Exception {
+        Game testGame = gameRepo.save(new Game(winnerDeck, loserDeck));
+        String id = testGame.getId();
+
+        mockMvc.perform(get("/api/game/" + id))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(delete("/api/game/" + id))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/game/" + id))
+                .andExpect(status().isNotFound());
+    }
 }

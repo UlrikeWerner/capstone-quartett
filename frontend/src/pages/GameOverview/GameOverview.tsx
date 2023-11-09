@@ -24,6 +24,18 @@ export default function GameOverview() {
             });
     }
 
+    function deleteGame(gameId: string) {
+        if(!window.confirm("Wirklich löschen?")){
+            return;
+        }
+        axios.delete("/api/game/" + gameId)
+            .then(() => {
+                getGameList();
+            }).catch(() => {
+                setErrorMessage("Beim Löschen ist was schief gelaufen!");
+        })
+    }
+
     return (
         <section className="game-overview">
             <h1 className="headline">Offene Spiele</h1>
@@ -36,9 +48,15 @@ export default function GameOverview() {
                         gameList.map((game) =>
                             <div className="game-element-wrapper" key={game.gameId}>
                                 <span className="game-title">{game.title}</span>
-                                <div>
+                                <div className="button-wrapper">
                                     <BasicButton text="Spielen"
-                                                    buttonClick={() => navigate('/game/' + game.gameId)}
+                                                 buttonClick={() => navigate('/game/' + game.gameId)}
+                                    />
+                                    <BasicButton text="close"
+                                                 icon={true}
+                                                 tooltip="löschen"
+                                                 functionValue={game.gameId}
+                                                 buttonClick={(value) => deleteGame(value)}
                                     />
                                 </div>
                             </div>
