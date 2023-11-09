@@ -52,7 +52,7 @@ public class GameService {
 
     public void updateGameTitle(String gameId, String title) throws GameNotFoundException, TitleIsEmptyException {
         Game currentGame = getGameById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
-        if(title.isBlank() || title.isEmpty()) {
+        if(title == null || title.isBlank()) {
             throw new TitleIsEmptyException();
         }
         currentGame.setTitle(title);
