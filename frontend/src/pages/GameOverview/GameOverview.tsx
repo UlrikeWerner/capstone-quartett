@@ -32,9 +32,10 @@ export default function GameOverview() {
             title: newTitle
         })
             .then(() => {
+                const gameIndex = gameList.findIndex((game) => game.gameId === gameId);
+                gameList[gameIndex].title = newTitle;
                 setTitleValue("");
                 setIdToEdit("");
-                getGameList();
             })
             .catch((error) => {
                 console.error(error);
