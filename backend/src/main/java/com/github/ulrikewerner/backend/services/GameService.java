@@ -50,6 +50,15 @@ public class GameService {
         return gameRepo.findById(id);
     }
 
+    public void updateGameTitle(String gameId, String title) throws GameNotFoundException, TitleIsEmptyException {
+        Game currentGame = getGameById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
+        if(title.isBlank() || title.isEmpty()) {
+            throw new TitleIsEmptyException();
+        }
+        currentGame.setTitle(title);
+        gameRepo.save(currentGame);
+    }
+
     public GameTurn getOpponentTurnResult(String gameId) throws CategoryNotFoundException, GameNotFoundException, NotOpponentTurnException, GameIsOverException {
         Game currentGame = getGameById(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
         if (currentGame.isFinished()) {
