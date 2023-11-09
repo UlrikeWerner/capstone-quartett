@@ -1,5 +1,5 @@
 import "./Info.scss";
-import FootballButton from "../../../../Component/FootballButton.tsx";
+import FootballButton from "../../../../Component/Buttons/FootballButton.tsx";
 import {useNavigate} from "react-router-dom";
 
 type InfoProps = {

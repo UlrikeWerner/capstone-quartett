@@ -1,4 +1,4 @@
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {GameStateDTO} from "../../types/GameStateDTO.ts";
@@ -9,10 +9,16 @@ import Info from "./Component/Info/Info.tsx";
 import Card from "./Component/Card/Card.tsx";
 import {TurnResultInputDTO} from "../../types/TurnResultInputDTO.ts";
 import leavesWreath from "../../assets/leaves-wreath.svg";
+import Dialog from "../../Component/Dialog/Dialog.tsx";
+import {GameInstructionText} from "../../types/GameIndrustion.tsx";
+import Backdrop from "../../Component/Dialog/Backdrop.tsx";
+import BasicButton from "../../Component/Buttons/BasicButton.tsx";
 
 export default function Game() {
     const {id} = useParams();
+    const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState<string>();
+    const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false);
     const [gameState, setGameState] = useState<GameStateDTO>();
     const [runningGameState, setRunningGameState] = useState<GameStateDTO>();
     const [infoText, setInfoText] = useState<string>("");
@@ -271,7 +277,22 @@ export default function Game() {
                     : runningGameState &&
                     <section className="gameBoard">
                         <ScoreBoard playerScore={runningGameState.score.player}
-                                    opponentScore={runningGameState.score.opponent}/>
+                                    opponentScore={runningGameState.score.opponent}
+                        />
+                        <div className="button-wrapper">
+                            <BasicButton
+                                icon={true}
+                                text="question_mark"
+                                tooltip="Anleitung"
+                                buttonClick={() => setDialogIsOpen(true)}
+                            />
+                            <BasicButton
+                                icon={true}
+                                text="chevron_left"
+                                tooltip="Lobby"
+                                buttonClick={() => navigate('/lobby')}
+                            />
+                        </div>
                         <section className="infoField">
                             <Info infoText={infoText}
                                   instructionText={instructionText}
@@ -350,6 +371,12 @@ export default function Game() {
                                 </div>
                             </section>
                         }
+                        <Dialog open={dialogIsOpen}
+                                content={GameInstructionText}
+                                buttonName="Schließen"
+                                buttonFunction={() => setDialogIsOpen(false)}
+                        />
+                        <Backdrop open={dialogIsOpen} />
                     </section>
             }
         </>

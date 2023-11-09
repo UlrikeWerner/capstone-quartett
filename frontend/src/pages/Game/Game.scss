@@ -5,9 +5,19 @@
   display: grid;
   grid-template-columns: 1fr 1.5fr 1.5fr 1fr;
   grid-template-areas:
-    ".          score      score        ."
+    ".          score      score        buttons"
     ".          info       info         ."
     "playerDeck playerCard opponentCard opponentDeck";
+}
+
+.button-wrapper {
+  grid-area: buttons;
+  display: flex;
+  justify-content: flex-end;
+  align-items: start;
+  column-gap: 0.5rem;
+  padding-top: 0.5rem;
+  padding-right: 0.75rem;
 }
 
 .infoField {
