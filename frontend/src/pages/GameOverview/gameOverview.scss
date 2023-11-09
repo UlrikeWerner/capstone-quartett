@@ -10,6 +10,14 @@
     font-size: 3rem;
   }
 
+  .games-button-wrapper {
+    display: flex;
+    column-gap: 0.5rem;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+  }
+
   .error {
     text-align: center;
   }

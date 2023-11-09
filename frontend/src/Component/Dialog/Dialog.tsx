@@ -5,7 +5,9 @@ type DialogProps = {
     readonly open: boolean;
     readonly content: string;
     readonly buttonName: string;
+    readonly buttonName2?: string;
     readonly buttonFunction: () => void;
+    readonly buttonFunction2?: () => void;
 }
 
 export default function Dialog(props: DialogProps) {
@@ -20,6 +22,13 @@ export default function Dialog(props: DialogProps) {
                 text={props.buttonName}
                 buttonClick={props.buttonFunction}
             />
+            {(props.buttonName2 && props.buttonFunction2) &&
+                <BasicButton
+                    border={true}
+                    text={props.buttonName2}
+                    buttonClick={props.buttonFunction2}
+                />
+            }
         </dialog>
     );
 }
