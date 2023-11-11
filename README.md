@@ -10,4 +10,6 @@ Dieses Spiel ist im Rahmen des Java Bootcamps bei 'neue fische' entstanden und d
 - statische Werte für die Karten: https://www.ran.de/sports/american-football/nfl/team-stats
 - Schrift Fira Sans: https://fonts.google.com/?query=Fira+San
 - Icons für Favicon und Buttons: https://fonts.google.com/icons Material Symbols
+- leaves-wreath.svg verändert: https://icons8.de/icons/set/lorbeerkranz
+- wood-pattern.png: https://www.transparenttextures.com/wood-pattern.html
 - NFL Logos: https://github.com/ChrisKatsaras/React-NFL-Logos
